@@ -1,0 +1,138 @@
+package org.eclipse.scout.healthcare.server.sql;
+
+public interface PersonSQLs {
+
+  //TODO [uko] occupation into scripts
+  String CREATE_TABLE = ""
+      + "CREATE   TABLE PERSON "
+      + "         (person_id VARCHAR(64) NOT NULL CONSTRAINT PERSON_PK PRIMARY KEY, "
+      + "          first_name VARCHAR(64), "
+      + "          last_name VARCHAR(64), "
+      + "          picture_url VARCHAR(512), "
+      + "          date_of_birth DATE, "
+      + "          gender VARCHAR(1), "
+      + "          street VARCHAR(64), "
+      + "          city VARCHAR(64), "
+      + "          country VARCHAR(2), "
+      + "          phone VARCHAR(20), "
+      + "          mobile VARCHAR(20), "
+      + "          email VARCHAR(64), "
+      + "          occupation_id VARCHAR(64), "
+      + "          notes VARCHAR(1024) "
+      + "         )";
+
+  String DROP_TABLE = "DROP TABLE PERSON";
+
+  String LOOKUP = ""
+      + "SELECT   person_id, "
+      + "         CASE "
+      + "           WHEN first_name IS null "
+      + "            THEN last_name "
+      + "           WHEN last_name IS null "
+      + "            THEN first_name "
+      + "           ELSE "
+      + "            first_name || ' ' || last_name "
+      + "         END "
+      + "FROM     PERSON "
+      + "WHERE    1 = 1 "
+      + "<key>    AND person_id = :key</key> "
+      + "<text>   AND (UPPER(first_name) LIKE UPPER('%'||:text||'%') "
+      + "         OR UPPER(last_name) LIKE UPPER('%'||:text||'%')) "
+      + "</text>"
+      + "<all> </all>";
+
+  String PAGE_SELECT = ""
+      + "SELECT   person_id, "
+      + "         first_name, "
+      + "         last_name, "
+      + "         city, "
+      + "         country, "
+      + "         phone, "
+      + "         mobile, "
+      + "         email "
+      + "FROM     PERSON ";
+
+  String PAGE_DATA_SELECT_INTO = ""
+      + "INTO     :{page.personId}, "
+      + "         :{page.firstName}, "
+      + "         :{page.lastName}, "
+      + "         :{page.city}, "
+      + "         :{page.country}, "
+      + "         :{page.phone}, "
+      + "         :{page.mobile}, "
+      + "         :{page.email} ";
+
+  String INSERT = ""
+      + "INSERT   INTO "
+      + "PERSON  (person_id) "
+      + "VALUES   (:personId)";
+
+  String SELECT = ""
+      + "SELECT   first_name, "
+      + "         last_name, "
+      + "         picture_url, "
+      + "         date_of_birth, "
+      + "         gender, "
+      + "         phone, "
+      + "         mobile, "
+      + "         email, "
+      + "         street, "
+      + "         city, "
+      + "         country, "
+      + "         notes "
+      + "FROM     PERSON "
+      + "WHERE    person_id = :personId "
+      + "INTO     :firstName, "
+      + "         :lastName, "
+      + "         :pictureUrl, "
+      + "         :dateOfBirth, "
+      + "         :genderGroup, "
+      + "         :phone, "
+      + "         :mobile, "
+      + "         :email, "
+      + "         :street, "
+      + "         :city, "
+      + "         :country, "
+      + "         :notes";
+
+  String UPDATE = ""
+      + "UPDATE   PERSON "
+      + "SET      first_name = :firstName, "
+      + "         last_name = :lastName, "
+      + "         picture_url = :pictureUrl, "
+      + "         date_of_birth = :dateOfBirth, "
+      + "         gender = :genderGroup, "
+      + "         phone  = :phone, "
+      + "         mobile = :mobile, "
+      + "         email = :email, "
+      + "         street = :street, "
+      + "         city = :city, "
+      + "         country = :country, "
+      + "         notes = :notes "
+      + "WHERE    person_id = :personId";
+
+  String INSERT_SAMPLE = ""
+      + "INSERT   INTO PERSON "
+      + "         (person_id, "
+      + "          first_name, "
+      + "          last_name, "
+      + "          picture_url, "
+      + "          date_of_birth, "
+      + "          gender, "
+      + "          street, "
+      + "          city, "
+      + "          country) "
+      + " ";
+
+  String VALUES_01 = ""
+      + "VALUES   ('prs01', "
+      + "          'Alice', "
+      + "          null, "
+      + "          'http://www.uergsel.de/uploads/Alice.png', "
+      + "          '26.11.1865', "
+      + "          'F', "
+      + "          null, "
+      + "          'Daresbury, Cheshire', "
+      + "          'GB')";
+
+}
