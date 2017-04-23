@@ -27,6 +27,10 @@ public class PersonSearchFormData extends AbstractFormData {
     return getFieldByClass(Location.class);
   }
 
+  public Occupation getOccupation() {
+    return getFieldByClass(Occupation.class);
+  }
+
   public static class FirstName extends AbstractValueFieldData<String> {
 
     private static final long serialVersionUID = 1L;
@@ -38,6 +42,11 @@ public class PersonSearchFormData extends AbstractFormData {
   }
 
   public static class Location extends AbstractAddressBoxData {
+
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class Occupation extends AbstractValueFieldData<String> {
 
     private static final long serialVersionUID = 1L;
   }

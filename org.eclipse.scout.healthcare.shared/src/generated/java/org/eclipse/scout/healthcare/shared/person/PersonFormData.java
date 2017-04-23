@@ -53,6 +53,10 @@ public class PersonFormData extends AbstractFormData {
     return getFieldByClass(Notes.class);
   }
 
+  public Occupation getOccupation() {
+    return getFieldByClass(Occupation.class);
+  }
+
   /**
    * access method for property PersonId.
    */
@@ -79,24 +83,8 @@ public class PersonFormData extends AbstractFormData {
     return getFieldByClass(PictureUrl.class);
   }
 
-  public ShowPassword getShowPassword() {
-    return getFieldByClass(ShowPassword.class);
-  }
-
   public Street getStreet() {
     return getFieldByClass(Street.class);
-  }
-
-  public WalletAddress getWalletAddress() {
-    return getFieldByClass(WalletAddress.class);
-  }
-
-  public WalletPassword getWalletPassword() {
-    return getFieldByClass(WalletPassword.class);
-  }
-
-  public WalletPath getWalletPath() {
-    return getFieldByClass(WalletPath.class);
   }
 
   public static class City extends AbstractValueFieldData<String> {
@@ -144,6 +132,11 @@ public class PersonFormData extends AbstractFormData {
     private static final long serialVersionUID = 1L;
   }
 
+  public static class Occupation extends AbstractValueFieldData<String> {
+
+    private static final long serialVersionUID = 1L;
+  }
+
   public static class PersonIdProperty extends AbstractPropertyData<String> {
 
     private static final long serialVersionUID = 1L;
@@ -159,27 +152,7 @@ public class PersonFormData extends AbstractFormData {
     private static final long serialVersionUID = 1L;
   }
 
-  public static class ShowPassword extends AbstractValueFieldData<Boolean> {
-
-    private static final long serialVersionUID = 1L;
-  }
-
   public static class Street extends AbstractValueFieldData<String> {
-
-    private static final long serialVersionUID = 1L;
-  }
-
-  public static class WalletAddress extends AbstractValueFieldData<String> {
-
-    private static final long serialVersionUID = 1L;
-  }
-
-  public static class WalletPassword extends AbstractValueFieldData<String> {
-
-    private static final long serialVersionUID = 1L;
-  }
-
-  public static class WalletPath extends AbstractValueFieldData<String> {
 
     private static final long serialVersionUID = 1L;
   }

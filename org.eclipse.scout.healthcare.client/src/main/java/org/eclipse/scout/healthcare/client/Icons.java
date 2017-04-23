@@ -26,4 +26,11 @@ public class Icons extends AbstractIcons {
   public static final String Trash = "font:awesomeIcons \uF1F8";
   public static final String OpenExternUri = "font:awesomeIcons \uF08E";
   public static final String Desinfacting = "font:awesomeIcons \uF2A7";
+  public static final String Heartbeat = "font:awesomeIcons \uF21E";
+  public static final String Doctor = "font:awesomeIcons \uF0F0";
+  public static final String BatteryEmpty = "font:awesomeIcons \uF244";
+  public static final String BatteryQuater = "font:awesomeIcons \uF243";
+  public static final String BatteryHalf = "font:awesomeIcons \uF242";
+  public static final String BatteryThreeQuater = "font:awesomeIcons \uF241";
+  public static final String BatteryFull = "font:awesomeIcons \uF240";
 }

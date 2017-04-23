@@ -2,7 +2,6 @@ package org.eclipse.scout.healthcare.server.sql;
 
 public interface PersonSQLs {
 
-  //TODO [uko] occupation into scripts
   String CREATE_TABLE = ""
       + "CREATE   TABLE PERSON "
       + "         (person_id VARCHAR(64) NOT NULL CONSTRAINT PERSON_PK PRIMARY KEY, "
@@ -49,7 +48,8 @@ public interface PersonSQLs {
       + "         country, "
       + "         phone, "
       + "         mobile, "
-      + "         email "
+      + "         email, "
+      + "         occupation_id "
       + "FROM     PERSON ";
 
   String PAGE_DATA_SELECT_INTO = ""
@@ -60,7 +60,8 @@ public interface PersonSQLs {
       + "         :{page.country}, "
       + "         :{page.phone}, "
       + "         :{page.mobile}, "
-      + "         :{page.email} ";
+      + "         :{page.email}, "
+      + "         :{page.occupation}";
 
   String INSERT = ""
       + "INSERT   INTO "
@@ -79,7 +80,8 @@ public interface PersonSQLs {
       + "         street, "
       + "         city, "
       + "         country, "
-      + "         notes "
+      + "         notes, "
+      + "         occupation_id "
       + "FROM     PERSON "
       + "WHERE    person_id = :personId "
       + "INTO     :firstName, "
@@ -93,7 +95,8 @@ public interface PersonSQLs {
       + "         :street, "
       + "         :city, "
       + "         :country, "
-      + "         :notes";
+      + "         :notes, "
+      + "         :occupation ";
 
   String UPDATE = ""
       + "UPDATE   PERSON "
@@ -108,7 +111,8 @@ public interface PersonSQLs {
       + "         street = :street, "
       + "         city = :city, "
       + "         country = :country, "
-      + "         notes = :notes "
+      + "         notes = :notes, "
+      + "         occupation_id = :occupation "
       + "WHERE    person_id = :personId";
 
   String INSERT_SAMPLE = ""
@@ -121,18 +125,80 @@ public interface PersonSQLs {
       + "          gender, "
       + "          street, "
       + "          city, "
-      + "          country) "
+      + "          country, "
+      + "          occupation_id) "
       + " ";
 
-  String VALUES_01 = ""
+  String VALUES_DOCTOR_01 = ""
       + "VALUES   ('prs01', "
-      + "          'Alice', "
-      + "          null, "
-      + "          'http://www.uergsel.de/uploads/Alice.png', "
-      + "          '26.11.1865', "
+      + "          'Andrea', "
+      + "          'Adams', "
+      + "          'http://media.richulradkon.de/public/bsi/Andrea_Adams_Doctor.png', "
+      + "          '26.11.1985', "
       + "          'F', "
       + "          null, "
-      + "          'Daresbury, Cheshire', "
-      + "          'GB')";
+      + "          null, "
+      + "          null, "
+      + "          'OCCUPATION.DOCTOR')";
+
+  String VALUES_DOCTOR_02 = ""
+      + "VALUES   ('prs02', "
+      + "          'Marta', "
+      + "          'Marks', "
+      + "          'http://media.richulradkon.de/public/bsi/Marta_Marks_Doctor.png', "
+      + "          '02.05.1979', "
+      + "          'F', "
+      + "          null, "
+      + "          null, "
+      + "          null, "
+      + "          'OCCUPATION.DOCTOR')";
+
+  String VALUES_DOCTOR_03 = ""
+      + "VALUES   ('prs03', "
+      + "          'Sven', "
+      + "          'Federkiel', "
+      + "          'http://media.richulradkon.de/public/bsi/Sven_Federkiel_Doctor.png', "
+      + "          '23.02.1975', "
+      + "          'M', "
+      + "          null, "
+      + "          null, "
+      + "          null, "
+      + "          'OCCUPATION.DOCTOR')";
+
+  String VALUES_NURSE_01 = ""
+      + "VALUES   ('prs04', "
+      + "          'Sarah', "
+      + "          'Smith', "
+      + "          'http://media.richulradkon.de/public/bsi/Sarah_Smith.png', "
+      + "          '14.10.1981', "
+      + "          'F', "
+      + "          null, "
+      + "          null, "
+      + "          null, "
+      + "          'OCCUPATION.NURSE')";
+
+  String VALUES_NURSE_02 = ""
+      + "VALUES   ('prs05', "
+      + "          'Sergio', "
+      + "          'Sapienti', "
+      + "          'http://media.richulradkon.de/public/bsi/Sergio_Sapienti.png', "
+      + "          '11.09.1978', "
+      + "          'M', "
+      + "          null, "
+      + "          null, "
+      + "          null, "
+      + "          'OCCUPATION.NURSE')";
+
+  String VALUES_NURSE_03 = ""
+      + "VALUES   ('prs06', "
+      + "          'Vicky', "
+      + "          'Valetti', "
+      + "          'http://media.richulradkon.de/public/bsi/Vicky_Valetti.png', "
+      + "          '21.03.1988', "
+      + "          'F', "
+      + "          null, "
+      + "          null, "
+      + "          null, "
+      + "          'OCCUPATION.NURSE')";
 
 }

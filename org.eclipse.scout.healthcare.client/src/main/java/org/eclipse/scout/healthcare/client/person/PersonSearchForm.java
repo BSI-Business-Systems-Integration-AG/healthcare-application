@@ -18,6 +18,8 @@ import org.eclipse.scout.healthcare.client.person.PersonSearchForm.MainBox.TabBo
 import org.eclipse.scout.healthcare.client.person.PersonSearchForm.MainBox.TabBox.FieldBox.FirstNameField;
 import org.eclipse.scout.healthcare.client.person.PersonSearchForm.MainBox.TabBox.FieldBox.LastNameField;
 import org.eclipse.scout.healthcare.client.person.PersonSearchForm.MainBox.TabBox.FieldBox.Location;
+import org.eclipse.scout.healthcare.client.person.PersonSearchForm.MainBox.TabBox.FieldBox.OccupationField;
+import org.eclipse.scout.healthcare.shared.person.OccupationCodeType;
 import org.eclipse.scout.healthcare.shared.person.PersonSearchFormData;
 import org.eclipse.scout.rt.client.dto.FormData;
 import org.eclipse.scout.rt.client.ui.desktop.outline.pages.AbstractSearchForm;
@@ -25,10 +27,12 @@ import org.eclipse.scout.rt.client.ui.form.AbstractFormHandler;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractResetButton;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractSearchButton;
 import org.eclipse.scout.rt.client.ui.form.fields.groupbox.AbstractGroupBox;
+import org.eclipse.scout.rt.client.ui.form.fields.smartfield.AbstractSmartField;
 import org.eclipse.scout.rt.client.ui.form.fields.stringfield.AbstractStringField;
 import org.eclipse.scout.rt.client.ui.form.fields.tabbox.AbstractTabBox;
 import org.eclipse.scout.rt.platform.Order;
 import org.eclipse.scout.rt.shared.TEXTS;
+import org.eclipse.scout.rt.shared.services.common.code.ICodeType;
 import org.eclipse.scout.rt.shared.services.common.jdbc.SearchFilter;
 
 @FormData(value = PersonSearchFormData.class, sdkCommand = FormData.SdkCommand.CREATE)
@@ -76,6 +80,10 @@ public class PersonSearchForm extends AbstractSearchForm {
     return getFieldByClass(MainBox.class);
   }
 
+  public OccupationField getOccupationField() {
+    return getFieldByClass(OccupationField.class);
+  }
+
   public ResetButton getResetButton() {
     return getFieldByClass(ResetButton.class);
   }
@@ -120,7 +128,7 @@ public class PersonSearchForm extends AbstractSearchForm {
           }
         }
 
-        @Order(3125)
+        @Order(3000)
         public class Location extends AbstractAddressBox {
 
           @Override
@@ -139,6 +147,21 @@ public class PersonSearchForm extends AbstractSearchForm {
             // no verification required for search
           }
         }
+
+        @Order(5000)
+        public class OccupationField extends AbstractSmartField<String> {
+
+          @Override
+          protected String getConfiguredLabel() {
+            return TEXTS.get("Occupation");
+          }
+
+          @Override
+          protected Class<? extends ICodeType<?, String>> getConfiguredCodeType() {
+            return OccupationCodeType.class;
+          }
+        }
+
       }
     }
 

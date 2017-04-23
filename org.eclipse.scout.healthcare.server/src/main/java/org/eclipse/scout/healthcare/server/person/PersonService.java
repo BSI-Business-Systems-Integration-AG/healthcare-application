@@ -12,14 +12,9 @@ package org.eclipse.scout.healthcare.server.person;
 
 import java.util.UUID;
 
-import org.eclipse.scout.healthcare.server.ethereum.EthereumService;
-import org.eclipse.scout.healthcare.server.ethereum.model.Account;
 import org.eclipse.scout.healthcare.server.sql.PersonSQLs;
 import org.eclipse.scout.healthcare.server.sql.SQLs;
-import org.eclipse.scout.healthcare.shared.ethereum.AccountFormData;
-import org.eclipse.scout.healthcare.shared.ethereum.AccountTablePageData;
-import org.eclipse.scout.healthcare.shared.ethereum.AccountTablePageData.AccountTableRowData;
-import org.eclipse.scout.healthcare.shared.ethereum.IAccountService;
+import org.eclipse.scout.healthcare.shared.person.EmployeePersonTablePageData;
 import org.eclipse.scout.healthcare.shared.person.IPersonService;
 import org.eclipse.scout.healthcare.shared.person.PersonCreatePermission;
 import org.eclipse.scout.healthcare.shared.person.PersonFormData;
@@ -27,7 +22,6 @@ import org.eclipse.scout.healthcare.shared.person.PersonReadPermission;
 import org.eclipse.scout.healthcare.shared.person.PersonSearchFormData;
 import org.eclipse.scout.healthcare.shared.person.PersonTablePageData;
 import org.eclipse.scout.healthcare.shared.person.PersonUpdatePermission;
-import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.exception.VetoException;
 import org.eclipse.scout.rt.platform.holders.NVPair;
 import org.eclipse.scout.rt.platform.util.StringUtility;
@@ -41,24 +35,49 @@ public class PersonService implements IPersonService {
   @Override
   public PersonTablePageData getPersonTableData(SearchFilter filter) {
     PersonTablePageData pageData = new PersonTablePageData();
-    PersonSearchFormData searchData = (PersonSearchFormData) filter.getFormData();
+
     StringBuilder sql = new StringBuilder();
 
     sql.append(PersonSQLs.PAGE_SELECT);
     sql.append(" WHERE 1 = 1 ");
 
-    if (searchData != null) {
-      addToWhere(sql, searchData.getFirstName().getValue(), "first_name", "firstName");
-      addToWhere(sql, searchData.getLastName().getValue(), "last_name", "lastName");
-      addToWhere(sql, searchData.getLocation().getCity().getValue(), "city", "location.city");
-      addToWhere(sql, searchData.getLocation().getCountry().getValue(), "country", "location.country");
-    }
+    PersonSearchFormData searchData = addSearchFilter(sql, filter);
 
     sql.append(PersonSQLs.PAGE_DATA_SELECT_INTO);
 
     SQL.selectInto(sql.toString(), searchData, new NVPair("page", pageData));
 
     return pageData;
+  }
+
+  @Override
+  public EmployeePersonTablePageData getEmployeePersonTableData(SearchFilter filter) {
+    EmployeePersonTablePageData pageData = new EmployeePersonTablePageData();
+
+    StringBuilder sql = new StringBuilder();
+
+    sql.append(PersonSQLs.PAGE_SELECT);
+    sql.append(" WHERE 1 = 1 ");
+
+    PersonSearchFormData searchData = addSearchFilter(sql, filter);
+
+    sql.append(PersonSQLs.PAGE_DATA_SELECT_INTO);
+
+    SQL.selectInto(sql.toString(), searchData, new NVPair("page", pageData));
+
+    return pageData;
+  }
+
+  protected PersonSearchFormData addSearchFilter(StringBuilder sql, SearchFilter filter) {
+    PersonSearchFormData searchData = (PersonSearchFormData) filter.getFormData();
+    if (searchData != null) {
+      addToWhere(sql, searchData.getFirstName().getValue(), "first_name", "firstName");
+      addToWhere(sql, searchData.getLastName().getValue(), "last_name", "lastName");
+      addToWhere(sql, searchData.getLocation().getCity().getValue(), "city", "location.city");
+      addToWhere(sql, searchData.getLocation().getCountry().getValue(), "country", "location.country");
+      addToWhere(sql, searchData.getOccupation().getValue(), "occupation_id", "occupation");
+    }
+    return searchData;
   }
 
   protected void addToWhere(StringBuilder sqlWhere, String fieldValue, String sqlAttribute, String searchAttribute) {
@@ -89,22 +108,6 @@ public class PersonService implements IPersonService {
     }
 
     SQL.selectInto(PersonSQLs.SELECT, formData);
-
-    String personId = formData.getPersonId();
-    Account wallet = null;
-
-    IAccountService accountService = BEANS.get(IAccountService.class);
-    AccountTablePageData pageData = accountService.getAccountTableData(new SearchFilter(), personId);
-    if (pageData.getRowCount() > 0) {
-      AccountTableRowData firstRow = pageData.rowAt(0);
-      AccountFormData accountData = accountService.load(firstRow.getAddress());
-      wallet = BEANS.get(EthereumService.class).getWallet(accountData.getAddress().getValue(), accountData.getPassword().getValue());
-    }
-
-    if (null != wallet) {
-      formData.getWalletAddress().setValue(wallet.getAddress());
-      formData.getWalletPath().setValue(wallet.getFile().getAbsolutePath());
-    }
 
     return formData;
   }

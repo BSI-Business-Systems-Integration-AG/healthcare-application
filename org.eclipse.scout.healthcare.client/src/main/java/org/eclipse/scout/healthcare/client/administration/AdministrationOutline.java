@@ -8,7 +8,7 @@
  * Contributors:
  *     BSI Business Systems Integration AG - initial API and implementation
  ******************************************************************************/
-package org.eclipse.scout.healthcare.client.contact;
+package org.eclipse.scout.healthcare.client.administration;
 
 import java.util.List;
 

@@ -33,7 +33,7 @@ public class DatabaseSetupService implements IDataStoreService {
 
           @Override
           public void run() throws Exception {
-            createPersonTable();
+            createDataStore();
           }
         };
 
@@ -51,39 +51,29 @@ public class DatabaseSetupService implements IDataStoreService {
       LOG.info("Database table 'PERSON' created");
 
       if (CONFIG.getPropertyValue(DatabaseProperties.DatabaseAutoPopulateProperty.class)) {
-        SQL.insert(PersonSQLs.INSERT_SAMPLE + PersonSQLs.VALUES_01);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_01A);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_02);
-//        /*
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_03);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_04);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_05);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_06);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_07);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_08);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_09);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_10);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_11);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_12);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_13);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_14);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_15);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_16);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_17);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_18);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_19);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_20);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_21);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_22);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_23);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_24);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_25);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_26);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_27);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_28);
-//        SQL.insert(SQLs.PERSON_INSERT_SAMPLE + SQLs.PERSON_VALUES_29);
-//        */
+        SQL.insert(PersonSQLs.INSERT_SAMPLE + PersonSQLs.VALUES_DOCTOR_01);
+        SQL.insert(PersonSQLs.INSERT_SAMPLE + PersonSQLs.VALUES_DOCTOR_02);
+        SQL.insert(PersonSQLs.INSERT_SAMPLE + PersonSQLs.VALUES_DOCTOR_03);
+
+        SQL.insert(PersonSQLs.INSERT_SAMPLE + PersonSQLs.VALUES_NURSE_01);
+        SQL.insert(PersonSQLs.INSERT_SAMPLE + PersonSQLs.VALUES_NURSE_02);
+        SQL.insert(PersonSQLs.INSERT_SAMPLE + PersonSQLs.VALUES_NURSE_03);
         LOG.info("Database table 'PERSON' populated with sample data");
+      }
+    }
+  }
+
+  public void createDeviceTable() {
+    if (!getExistingTables().contains("DEVICE")) {
+      SQL.insert(DeviceSQLs.CREATE_TABLE);
+      LOG.info("Database table 'DEVICE' created");
+      if (CONFIG.getPropertyValue(DatabaseProperties.DatabaseAutoPopulateProperty.class)) {
+        SQL.insert(DeviceSQLs.INSERT_SAMPLE + DeviceSQLs.VALUES_01);
+        SQL.insert(DeviceSQLs.INSERT_SAMPLE + DeviceSQLs.VALUES_02);
+        SQL.insert(DeviceSQLs.INSERT_SAMPLE + DeviceSQLs.VALUES_03);
+        SQL.insert(DeviceSQLs.INSERT_SAMPLE + DeviceSQLs.VALUES_04);
+        SQL.insert(DeviceSQLs.INSERT_SAMPLE + DeviceSQLs.VALUES_05);
+        LOG.info("Database table 'DEVICE' populated with sample data");
       }
     }
   }
@@ -93,17 +83,16 @@ public class DatabaseSetupService implements IDataStoreService {
     SQL.selectInto(SQLs.SELECT_TABLE_NAMES, new NVPair("result", tables));
     return CollectionUtility.hashSet(tables.getValue());
   }
-  // end::service[]
 
   @Override
   public void dropDataStore() {
     SQL.update(PersonSQLs.DROP_TABLE);
+    SQL.update(DeviceSQLs.DROP_TABLE);
   }
 
   @Override
   public void createDataStore() {
     createPersonTable();
+    createDeviceTable();
   }
-  // tag::service[]
 }
-// end::service[]

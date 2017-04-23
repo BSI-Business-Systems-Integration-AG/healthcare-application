@@ -32,11 +32,8 @@ import org.eclipse.scout.healthcare.client.person.PersonForm.MainBox.DetailsBox.
 import org.eclipse.scout.healthcare.client.person.PersonForm.MainBox.DetailsBox.ContactInfoBox.PhoneField;
 import org.eclipse.scout.healthcare.client.person.PersonForm.MainBox.DetailsBox.NotesBox;
 import org.eclipse.scout.healthcare.client.person.PersonForm.MainBox.DetailsBox.NotesBox.NotesField;
-import org.eclipse.scout.healthcare.client.person.PersonForm.MainBox.DetailsBox.WalletBox.CreateWalletButton;
-import org.eclipse.scout.healthcare.client.person.PersonForm.MainBox.DetailsBox.WalletBox.ShowPasswordField;
-import org.eclipse.scout.healthcare.client.person.PersonForm.MainBox.DetailsBox.WalletBox.WalletAddressField;
-import org.eclipse.scout.healthcare.client.person.PersonForm.MainBox.DetailsBox.WalletBox.WalletPasswordField;
-import org.eclipse.scout.healthcare.client.person.PersonForm.MainBox.DetailsBox.WalletBox.WalletPathField;
+import org.eclipse.scout.healthcare.client.person.PersonForm.MainBox.DetailsBox.WorkBox;
+import org.eclipse.scout.healthcare.client.person.PersonForm.MainBox.DetailsBox.WorkBox.OccupationField;
 import org.eclipse.scout.healthcare.client.person.PersonForm.MainBox.GeneralBox;
 import org.eclipse.scout.healthcare.client.person.PersonForm.MainBox.GeneralBox.DateOfBirthField;
 import org.eclipse.scout.healthcare.client.person.PersonForm.MainBox.GeneralBox.FirstNameField;
@@ -47,14 +44,13 @@ import org.eclipse.scout.healthcare.client.person.PersonForm.MainBox.GeneralBox.
 import org.eclipse.scout.healthcare.client.person.PersonForm.MainBox.OkButton;
 import org.eclipse.scout.healthcare.shared.person.GenderCodeType;
 import org.eclipse.scout.healthcare.shared.person.IPersonService;
+import org.eclipse.scout.healthcare.shared.person.OccupationCodeType;
 import org.eclipse.scout.healthcare.shared.person.PersonFormData;
 import org.eclipse.scout.rt.client.dto.FormData;
 import org.eclipse.scout.rt.client.ui.action.menu.AbstractMenu;
 import org.eclipse.scout.rt.client.ui.form.AbstractForm;
 import org.eclipse.scout.rt.client.ui.form.IForm;
 import org.eclipse.scout.rt.client.ui.form.fields.IValueField;
-import org.eclipse.scout.rt.client.ui.form.fields.booleanfield.AbstractBooleanField;
-import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractButton;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractCancelButton;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractLinkButton;
 import org.eclipse.scout.rt.client.ui.form.fields.button.AbstractOkButton;
@@ -78,34 +74,28 @@ import org.eclipse.scout.rt.shared.TEXTS;
 import org.eclipse.scout.rt.shared.services.common.code.ICodeType;
 import org.eclipse.scout.rt.shared.services.lookup.ILookupCall;
 
-// tag::init[]
 @FormData(value = PersonFormData.class, sdkCommand = FormData.SdkCommand.CREATE) // <1>
-// tag::structure[]
-// tag::validate[]
 public class PersonForm extends AbstractForm {
 
-  // end::validate[]
-  // end::structure[]
-  // represents the person's primary key
   private String personId;
 
-  @FormData // <2>
+  @FormData
   public String getPersonId() {
     return personId;
   }
 
-  @FormData // <2>
+  @FormData
   public void setPersonId(String personId) {
     this.personId = personId;
   }
 
   @Override
-  public Object computeExclusiveKey() { // <3>
+  public Object computeExclusiveKey() {
     return getPersonId();
   }
 
   @Override
-  protected int getConfiguredDisplayHint() { // <4>
+  protected int getConfiguredDisplayHint() {
     return IForm.DISPLAY_HINT_VIEW;
   }
 
@@ -113,7 +103,6 @@ public class PersonForm extends AbstractForm {
   protected String getConfiguredTitle() {
     return TEXTS.get("Person");
   }
-  //end::init[]
 
   public void startModify() {
     startInternalExclusive(new ModifyHandler());
@@ -133,6 +122,14 @@ public class PersonForm extends AbstractForm {
 
   public PictureUrlField getPictureUrlField() {
     return getFieldByClass(PictureUrlField.class);
+  }
+
+  public WorkBox getWorkBox() {
+    return getFieldByClass(WorkBox.class);
+  }
+
+  public OccupationField getOccupationField() {
+    return getFieldByClass(OccupationField.class);
   }
 
   public NotesBox getNotesBox() {
@@ -193,26 +190,6 @@ public class PersonForm extends AbstractForm {
 
   public PictureField getPictureField() {
     return getFieldByClass(PictureField.class);
-  }
-
-  public WalletPathField getWalletPathField() {
-    return getFieldByClass(WalletPathField.class);
-  }
-
-  public CreateWalletButton getCreateWalletButton() {
-    return getFieldByClass(CreateWalletButton.class);
-  }
-
-  public WalletAddressField getWalletAddressField() {
-    return getFieldByClass(WalletAddressField.class);
-  }
-
-  public ShowPasswordField getShowPasswordField() {
-    return getFieldByClass(ShowPasswordField.class);
-  }
-
-  public WalletPasswordField getWalletPasswordField() {
-    return getFieldByClass(WalletPasswordField.class);
   }
 
   @Order(10)
@@ -383,6 +360,35 @@ public class PersonForm extends AbstractForm {
     public class DetailsBox extends AbstractTabBox {
 
       @Order(1000)
+      public class WorkBox extends AbstractGroupBox {
+        @Override
+        protected String getConfiguredLabel() {
+          return TEXTS.get("Work");
+        }
+
+        @Order(1000)
+        public class OccupationField extends AbstractSmartField<String> {
+
+          @Override
+          protected String getConfiguredLabel() {
+            return TEXTS.get("Occupation");
+          }
+
+          @Override
+          protected boolean getConfiguredMandatory() {
+            return true;
+          }
+
+          @Override
+          protected Class<? extends ICodeType<?, String>> getConfiguredCodeType() {
+            return OccupationCodeType.class;
+          }
+
+        }
+
+      }
+
+      @Order(2000)
       public class ContactInfoBox extends AbstractGroupBox {
 
         @Override
@@ -598,103 +604,6 @@ public class PersonForm extends AbstractForm {
         }
       }
 
-      @Order(2000)
-      public class WalletBox extends AbstractGroupBox {
-
-        @Override
-        protected String getConfiguredLabel() {
-          return TEXTS.get("Wallet");
-        }
-
-        @Order(1000)
-        public class WalletPathField extends AbstractStringField {
-          @Override
-          protected String getConfiguredLabel() {
-            return TEXTS.get("PathToWallet");
-          }
-
-          @Override
-          protected int getConfiguredMaxLength() {
-            return 128;
-          }
-        }
-
-        @Order(1500)
-        public class WalletAddressField extends AbstractStringField {
-          @Override
-          protected String getConfiguredLabel() {
-            return TEXTS.get("WalletAddress");
-          }
-
-          @Override
-          protected boolean getConfiguredEnabled() {
-            return false;
-          }
-
-          @Override
-          protected int getConfiguredMaxLength() {
-            return 128;
-          }
-        }
-
-        @Order(2000)
-        public class WalletPasswordField extends AbstractStringField {
-          @Override
-          protected String getConfiguredLabel() {
-            return TEXTS.get("Password");
-          }
-
-          @Override
-          protected int getConfiguredMaxLength() {
-            return 128;
-          }
-
-          @Override
-          protected boolean getConfiguredInputMasked() {
-            return true;
-          }
-        }
-
-        @Order(3000)
-        public class ShowPasswordField extends AbstractBooleanField {
-          @Override
-          protected String getConfiguredLabel() {
-            return TEXTS.get("ShowPassword");
-          }
-
-          @Override
-          protected void execInitField() {
-            setValue(false);
-          }
-
-          @Override
-          protected void execChangedValue() {
-            getWalletPasswordField().setInputMasked(!getValue());
-          }
-        }
-
-        @Order(4000)
-        public class CreateWalletButton extends AbstractButton {
-          @Override
-          protected String getConfiguredLabel() {
-            return TEXTS.get("CreateWallet");
-          }
-
-          @Override
-          protected boolean getConfiguredProcessButton() {
-            return false;
-          }
-
-          @Override
-          protected void execClickAction() {
-//            String walletPath = getWalletPathField().getValue();
-//            String password = getWalletPasswordField().getValue();
-//            String address = BEANS.get(IWalletService.class).create(walletPath, password);
-          }
-        }
-
-      }
-
       @Order(3000)
       public class NotesBox extends AbstractGroupBox {
 
@@ -768,6 +677,13 @@ public class PersonForm extends AbstractForm {
   public class NewHandler extends AbstractDirtyFormHandler {
 
     @Override
+    protected void execLoad() {
+      PersonFormData formData = new PersonFormData();
+      formData = setStartValues(formData);
+      importFormData(formData);
+    }
+
+    @Override
     protected void execStore() {
       IPersonService service = BEANS.get(IPersonService.class);
       PersonFormData formData = new PersonFormData();
@@ -778,6 +694,16 @@ public class PersonForm extends AbstractForm {
     @Override
     protected void execDirtyStatusChanged(boolean dirty) {
       getForm().setSubTitle(calculateSubTitle());
+    }
+
+    private PersonFormData setStartValues(PersonFormData formData) {
+      if (null == formData) {
+        formData = new PersonFormData();
+      }
+
+      formData.getOccupation().setValue(OccupationCodeType.NurseCode.ID);
+
+      return formData;
     }
   }
 

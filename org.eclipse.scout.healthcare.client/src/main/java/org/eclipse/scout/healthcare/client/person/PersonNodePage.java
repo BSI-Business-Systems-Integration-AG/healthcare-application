@@ -2,9 +2,9 @@ package org.eclipse.scout.healthcare.client.person;
 
 import java.util.List;
 
+import org.eclipse.scout.healthcare.client.ethereum.AccountTablePage;
 import org.eclipse.scout.rt.client.ui.desktop.outline.pages.AbstractPageWithNodes;
 import org.eclipse.scout.rt.client.ui.desktop.outline.pages.IPage;
-import org.eclipse.scout.healthcare.client.ethereum.AccountTablePage;
 
 public class PersonNodePage extends AbstractPageWithNodes {
 

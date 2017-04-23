@@ -13,7 +13,7 @@ package org.eclipse.scout.healthcare.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.scout.healthcare.client.contact.AdministrationOutline;
+import org.eclipse.scout.healthcare.client.administration.AdministrationOutline;
 import org.eclipse.scout.rt.client.session.ClientSessionProvider;
 import org.eclipse.scout.rt.client.ui.action.keystroke.AbstractKeyStroke;
 import org.eclipse.scout.rt.client.ui.action.keystroke.IKeyStroke;
@@ -42,13 +42,14 @@ public class Desktop extends AbstractDesktop {
   @Override
   protected List<Class<? extends IOutline>> getConfiguredOutlines() {
     List<Class<? extends IOutline>> outlines = new ArrayList<>();
+    outlines.add(StandardOutline.class);
     outlines.add(AdministrationOutline.class);
     return outlines;
   }
 
   @Override
   protected void execDefaultView() {
-    setOutline(AdministrationOutline.class);
+    setOutline(StandardOutline.class);
   }
 
   public static Desktop get() {
@@ -75,13 +76,13 @@ public class Desktop extends AbstractDesktop {
 
   // outline buttons of the application
   @Order(1000)
-  public class ContactOutlineViewButton extends AbstractOutlineViewButton {
+  public class StandardOutlineViewButton extends AbstractOutlineViewButton {
 
-    public ContactOutlineViewButton() {
-      this(AdministrationOutline.class);
+    public StandardOutlineViewButton() {
+      this(StandardOutline.class);
     }
 
-    protected ContactOutlineViewButton(Class<? extends AdministrationOutline> outlineClass) {
+    protected StandardOutlineViewButton(Class<? extends StandardOutline> outlineClass) {
       super(Desktop.this, outlineClass);
     }
 
@@ -92,7 +93,29 @@ public class Desktop extends AbstractDesktop {
 
     @Override
     protected String getConfiguredKeyStroke() {
-      return "ctrl-shift-c";
+      return "ctrl-shift-h";
+    }
+  }
+
+  @Order(2000)
+  public class AdministrationOutlineViewButton extends AbstractOutlineViewButton {
+
+    public AdministrationOutlineViewButton() {
+      this(AdministrationOutline.class);
+    }
+
+    protected AdministrationOutlineViewButton(Class<? extends AdministrationOutline> outlineClass) {
+      super(Desktop.this, outlineClass);
+    }
+
+    @Override
+    protected DisplayStyle getConfiguredDisplayStyle() {
+      return DisplayStyle.MENU;
+    }
+
+    @Override
+    protected String getConfiguredKeyStroke() {
+      return "ctrl-shift-a";
     }
   }
 

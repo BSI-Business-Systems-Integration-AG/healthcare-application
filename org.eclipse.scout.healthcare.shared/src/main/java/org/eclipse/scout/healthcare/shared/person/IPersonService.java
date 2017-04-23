@@ -20,6 +20,8 @@ public interface IPersonService {
 
   PersonTablePageData getPersonTableData(SearchFilter filter);
 
+  EmployeePersonTablePageData getEmployeePersonTableData(SearchFilter filter);
+
   PersonFormData create(PersonFormData formData);
 
   PersonFormData load(PersonFormData formData);
