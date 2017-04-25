@@ -3,8 +3,8 @@ package org.eclipse.scout.healthcare.client.device;
 import org.eclipse.scout.healthcare.client.Icons;
 import org.eclipse.scout.healthcare.client.device.DeviceTablePage.Table;
 import org.eclipse.scout.healthcare.shared.devices.DeviceStatusCodeType;
-import org.eclipse.scout.healthcare.shared.devices.DevicesTablePageData;
-import org.eclipse.scout.healthcare.shared.devices.IDevicesService;
+import org.eclipse.scout.healthcare.shared.devices.DeviceTablePageData;
+import org.eclipse.scout.healthcare.shared.devices.IDeviceService;
 import org.eclipse.scout.rt.client.dto.Data;
 import org.eclipse.scout.rt.client.ui.basic.cell.Cell;
 import org.eclipse.scout.rt.client.ui.basic.table.AbstractTable;
@@ -13,6 +13,7 @@ import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractLongColumn;
 import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractSmartColumn;
 import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractStringColumn;
 import org.eclipse.scout.rt.client.ui.desktop.outline.pages.AbstractPageWithTable;
+import org.eclipse.scout.rt.client.ui.desktop.outline.pages.IPage;
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.Order;
 import org.eclipse.scout.rt.platform.util.StringUtility;
@@ -21,7 +22,7 @@ import org.eclipse.scout.rt.shared.services.common.code.ICode;
 import org.eclipse.scout.rt.shared.services.common.code.ICodeType;
 import org.eclipse.scout.rt.shared.services.common.jdbc.SearchFilter;
 
-@Data(DevicesTablePageData.class)
+@Data(DeviceTablePageData.class)
 public class DeviceTablePage extends AbstractPageWithTable<Table> {
 
   @Override
@@ -31,7 +32,14 @@ public class DeviceTablePage extends AbstractPageWithTable<Table> {
 
   @Override
   protected void execLoadData(SearchFilter filter) {
-    importPageData(BEANS.get(IDevicesService.class).getDevicesTableData(filter));
+    importPageData(BEANS.get(IDeviceService.class).getDevicesTableData(filter));
+  }
+
+  @Override
+  protected IPage<?> execCreateChildPage(ITableRow row) {
+    String rowDeviceNr = getTable().getDeviceNrColumn().getValue(row);
+    DeviceNodePage childPage = new DeviceNodePage(rowDeviceNr);
+    return childPage;
   }
 
   public class Table extends AbstractTable {
