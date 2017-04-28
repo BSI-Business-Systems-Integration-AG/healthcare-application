@@ -16,7 +16,7 @@
   <packaging>war</packaging>
 
   <dependencies>
-    <!-- FX Trading Network Application -->
+    <!-- Healthcare Application -->
     <dependency>
       <groupId>org.eclipse.scout.healthcare</groupId>
       <artifactId>org.eclipse.scout.healthcare.ui.html</artifactId>

@@ -1,5 +1,7 @@
 package org.eclipse.scout.healthcare.shared.device;
 
+import java.util.Date;
+
 import javax.annotation.Generated;
 
 import org.eclipse.scout.rt.shared.data.form.AbstractFormData;
@@ -14,11 +16,137 @@ public class DeviceOverviewFormData extends AbstractFormData {
 
   private static final long serialVersionUID = 1L;
 
-  public DeviceNr getDeviceNr() {
-    return getFieldByClass(DeviceNr.class);
+  public BatchNr getBatchNr() {
+    return getFieldByClass(BatchNr.class);
   }
 
-  public static class DeviceNr extends AbstractValueFieldData<String> {
+  public BottelingDate getBottelingDate() {
+    return getFieldByClass(BottelingDate.class);
+  }
+
+  public BottelingDateData getBottelingDateData() {
+    return getFieldByClass(BottelingDateData.class);
+  }
+
+  public CartridgeId getCartridgeId() {
+    return getFieldByClass(CartridgeId.class);
+  }
+
+  public Chemistry getChemistry() {
+    return getFieldByClass(Chemistry.class);
+  }
+
+  public DeviceId getDeviceId() {
+    return getFieldByClass(DeviceId.class);
+  }
+
+  public DeviceName getDeviceName() {
+    return getFieldByClass(DeviceName.class);
+  }
+
+  public ExpirationDate getExpirationDate() {
+    return getFieldByClass(ExpirationDate.class);
+  }
+
+  public ExpirationDateData getExpirationDateData() {
+    return getFieldByClass(ExpirationDateData.class);
+  }
+
+  public FillLevel getFillLevel() {
+    return getFieldByClass(FillLevel.class);
+  }
+
+  public Location getLocation() {
+    return getFieldByClass(Location.class);
+  }
+
+  public LotNr getLotNr() {
+    return getFieldByClass(LotNr.class);
+  }
+
+  public MacAddress getMacAddress() {
+    return getFieldByClass(MacAddress.class);
+  }
+
+  public Status getStatus() {
+    return getFieldByClass(Status.class);
+  }
+
+  public TagId getTagId() {
+    return getFieldByClass(TagId.class);
+  }
+
+  public static class BatchNr extends AbstractValueFieldData<String> {
+
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class BottelingDate extends AbstractValueFieldData<String> {
+
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class BottelingDateData extends AbstractValueFieldData<Date> {
+
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class CartridgeId extends AbstractValueFieldData<String> {
+
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class Chemistry extends AbstractValueFieldData<String> {
+
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class DeviceId extends AbstractValueFieldData<String> {
+
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class DeviceName extends AbstractValueFieldData<String> {
+
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class ExpirationDate extends AbstractValueFieldData<String> {
+
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class ExpirationDateData extends AbstractValueFieldData<Date> {
+
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class FillLevel extends AbstractValueFieldData<String> {
+
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class Location extends AbstractValueFieldData<String> {
+
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class LotNr extends AbstractValueFieldData<String> {
+
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class MacAddress extends AbstractValueFieldData<String> {
+
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class Status extends AbstractValueFieldData<String> {
+
+    private static final long serialVersionUID = 1L;
+  }
+
+  public static class TagId extends AbstractValueFieldData<String> {
 
     private static final long serialVersionUID = 1L;
   }

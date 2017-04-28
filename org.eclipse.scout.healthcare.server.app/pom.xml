@@ -89,7 +89,7 @@
   </build>
 
   <dependencies>
-    <!-- FX Trading Network Application -->
+    <!-- Healthcare Application -->
     <dependency>
       <groupId>org.eclipse.scout.healthcare</groupId>
       <artifactId>org.eclipse.scout.healthcare.server</artifactId>

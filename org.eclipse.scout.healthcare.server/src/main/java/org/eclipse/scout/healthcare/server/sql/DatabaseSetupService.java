@@ -78,6 +78,21 @@ public class DatabaseSetupService implements IDataStoreService {
     }
   }
 
+  public void createCartridgeTable() {
+    if (!getExistingTables().contains("CARTRIDGE")) {
+      SQL.insert(DeviceSQLs.CREATE_CARTRIDGE_TABLE);
+      LOG.info("Database table 'CARTRIDGE' created");
+      if (CONFIG.getPropertyValue(DatabaseProperties.DatabaseAutoPopulateProperty.class)) {
+        SQL.insert(DeviceSQLs.INSERT_CARTRIDGE_SAMPLE + DeviceSQLs.CARTRIDGE_VALUES_01);
+        SQL.insert(DeviceSQLs.INSERT_CARTRIDGE_SAMPLE + DeviceSQLs.CARTRIDGE_VALUES_02);
+        SQL.insert(DeviceSQLs.INSERT_CARTRIDGE_SAMPLE + DeviceSQLs.CARTRIDGE_VALUES_03);
+        SQL.insert(DeviceSQLs.INSERT_CARTRIDGE_SAMPLE + DeviceSQLs.CARTRIDGE_VALUES_04);
+        SQL.insert(DeviceSQLs.INSERT_CARTRIDGE_SAMPLE + DeviceSQLs.CARTRIDGE_VALUES_05);
+        LOG.info("Database table 'CARTRIDGE' populated with sample data");
+      }
+    }
+  }
+
   private Set<String> getExistingTables() {
     StringArrayHolder tables = new StringArrayHolder();
     SQL.selectInto(SQLs.SELECT_TABLE_NAMES, new NVPair("result", tables));
@@ -88,11 +103,13 @@ public class DatabaseSetupService implements IDataStoreService {
   public void dropDataStore() {
     SQL.update(PersonSQLs.DROP_TABLE);
     SQL.update(DeviceSQLs.DROP_TABLE);
+    SQL.update(DeviceSQLs.DROP_CARTRIDGE_TABLE);
   }
 
   @Override
   public void createDataStore() {
     createPersonTable();
     createDeviceTable();
+    createCartridgeTable();
   }
 }

@@ -25,7 +25,7 @@
 	</properties>
 
 	<dependencies>
-		<!-- FX Trading Network Application Client -->
+		<!-- Healthcare Application Client -->
 		<dependency>
 			<groupId>org.eclipse.scout.healthcare</groupId>
 			<artifactId>org.eclipse.scout.healthcare.ui.html</artifactId>
@@ -47,7 +47,7 @@
 			<artifactId>jul-to-slf4j</artifactId>
 		</dependency>
 
-		<!-- FX Trading Network Application Server -->
+		<!-- Healthcare Application Server -->
 		<dependency>
 			<groupId>org.eclipse.scout.healthcare</groupId>
 			<artifactId>org.eclipse.scout.healthcare.server</artifactId>

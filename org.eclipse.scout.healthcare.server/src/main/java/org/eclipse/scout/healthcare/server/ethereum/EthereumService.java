@@ -10,12 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
 import org.eclipse.scout.healthcare.server.ethereum.EthereumProperties.EthereumClientIpProperty;
 import org.eclipse.scout.healthcare.server.ethereum.EthereumProperties.EthereumClientPortProperty;
 import org.eclipse.scout.healthcare.server.ethereum.EthereumProperties.EthereumClientProperty;
@@ -69,12 +68,15 @@ public class EthereumService {
   private String rpc_coinbase;
 
   // TODO replace these with some real persistence
-  private static ConcurrentMap<String, Account> m_wallets = new ConcurrentHashMap<String, Account>();
+  // Replaced ConcurrentHashMap with Map because of error in animal-sniffer issue #8
+//  private static ConcurrentMap<String, Account> m_wallets = new ConcurrentHashMap<String, Account>();
+  private static Map<String, Account> m_wallets = new HashMap<String, Account>();
   // transactions need to be persisted as well as ethereum currently does not offer an api to list all tx for an account
   // also see https://github.com/ethereum/go-ethereum/issues/1897
   private static Map<UUID, Transaction> transactions = new HashMap<>();
 
   @PostConstruct
+  @IgnoreJRERequirement
   private void init() {
     String clientConfig = CONFIG.getPropertyValue(EthereumClientProperty.class);
     if (StringUtility.compareIgnoreCase(EthereumClientCodeType.TestRpcCode.ID, clientConfig) == 0) {
@@ -103,6 +105,7 @@ public class EthereumService {
     }
   }
 
+  @IgnoreJRERequirement
   private String transferEther(String from, String to, BigInteger amount) throws Exception {
     BigInteger nonce = getNonce(from);
 
@@ -171,6 +174,7 @@ public class EthereumService {
     m_wallets.put(wallet.getAddress(), wallet);
   }
 
+  @IgnoreJRERequirement
   public Set<String> getTransactions() {
     return transactions.keySet()
         .stream()
@@ -220,6 +224,7 @@ public class EthereumService {
     return Convert.fromWei(new BigDecimal(balance), unit);
   }
 
+  @IgnoreJRERequirement
   public BigInteger getBalanceWei(String address) {
     try {
       EthGetBalance balanceResponse = getWeb3j().ethGetBalance(address, DefaultBlockParameterName.LATEST).sendAsync().get();
@@ -233,6 +238,7 @@ public class EthereumService {
     }
   }
 
+  @IgnoreJRERequirement
   public Transaction send(Transaction tx) {
     LOG.info("Sending TX ...");
     EthSendTransaction ethSendTransaction = null;
@@ -271,6 +277,7 @@ public class EthereumService {
     }
   }
 
+  @IgnoreJRERequirement
   public Transaction refreshStatus(String transactionId) {
     LOG.info("Polling TX status...");
 
@@ -320,6 +327,7 @@ public class EthereumService {
     return nonce;
   }
 
+  @IgnoreJRERequirement
   private BigInteger getNonceFix(String address) throws Exception {
     LOG.info("Getting nonce for address " + address + " ...");
 

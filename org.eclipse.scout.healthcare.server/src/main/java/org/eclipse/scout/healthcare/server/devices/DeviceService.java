@@ -1,6 +1,7 @@
 package org.eclipse.scout.healthcare.server.devices;
 
 import org.eclipse.scout.healthcare.server.sql.DeviceSQLs;
+import org.eclipse.scout.healthcare.shared.device.DeviceOverviewFormData;
 import org.eclipse.scout.healthcare.shared.devices.DeviceTablePageData;
 import org.eclipse.scout.healthcare.shared.devices.IDeviceService;
 import org.eclipse.scout.rt.platform.holders.NVPair;
@@ -24,4 +25,14 @@ public class DeviceService implements IDeviceService {
 
     return pageData;
   }
+
+  @Override
+  public DeviceOverviewFormData load(String deviceId) {
+    DeviceOverviewFormData formData = new DeviceOverviewFormData();
+    formData.getDeviceId().setValue(deviceId);
+    SQL.selectInto(DeviceSQLs.LOAD, formData);
+
+    return formData;
+  }
+
 }

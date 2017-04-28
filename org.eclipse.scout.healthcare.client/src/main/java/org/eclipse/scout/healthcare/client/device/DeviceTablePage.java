@@ -1,6 +1,5 @@
 package org.eclipse.scout.healthcare.client.device;
 
-import org.eclipse.scout.healthcare.client.Icons;
 import org.eclipse.scout.healthcare.client.device.DeviceTablePage.Table;
 import org.eclipse.scout.healthcare.shared.devices.DeviceStatusCodeType;
 import org.eclipse.scout.healthcare.shared.devices.DeviceTablePageData;
@@ -37,8 +36,8 @@ public class DeviceTablePage extends AbstractPageWithTable<Table> {
 
   @Override
   protected IPage<?> execCreateChildPage(ITableRow row) {
-    String rowDeviceNr = getTable().getDeviceNrColumn().getValue(row);
-    DeviceNodePage childPage = new DeviceNodePage(rowDeviceNr);
+    String rowDeviceId = getTable().getDeviceIdColumn().getValue(row);
+    DeviceNodePage childPage = new DeviceNodePage(rowDeviceId);
     return childPage;
   }
 
@@ -52,6 +51,14 @@ public class DeviceTablePage extends AbstractPageWithTable<Table> {
       return getColumnSet().getColumnByClass(FillLevelColumn.class);
     }
 
+    public DeviceNameColumn getDeviceNameColumn() {
+      return getColumnSet().getColumnByClass(DeviceNameColumn.class);
+    }
+
+    public MacAddressColumn getMacAddressColumn() {
+      return getColumnSet().getColumnByClass(MacAddressColumn.class);
+    }
+
     public StatusColumn getStatusColumn() {
       return getColumnSet().getColumnByClass(StatusColumn.class);
     }
@@ -60,15 +67,20 @@ public class DeviceTablePage extends AbstractPageWithTable<Table> {
       return getColumnSet().getColumnByClass(LocationColumn.class);
     }
 
-    public DeviceNrColumn getDeviceNrColumn() {
-      return getColumnSet().getColumnByClass(DeviceNrColumn.class);
+    public DeviceIdColumn getDeviceIdColumn() {
+      return getColumnSet().getColumnByClass(DeviceIdColumn.class);
     }
 
     @Order(1000)
-    public class DeviceNrColumn extends AbstractStringColumn {
+    public class DeviceIdColumn extends AbstractStringColumn {
       @Override
       protected String getConfiguredHeaderText() {
-        return TEXTS.get("Device-Nr");
+        return TEXTS.get("DeviceID");
+      }
+
+      @Override
+      protected boolean getConfiguredVisible() {
+        return false;
       }
 
       @Override
@@ -78,6 +90,34 @@ public class DeviceTablePage extends AbstractPageWithTable<Table> {
     }
 
     @Order(2000)
+    public class DeviceNameColumn extends AbstractStringColumn {
+
+      @Override
+      protected String getConfiguredHeaderText() {
+        return TEXTS.get("Name");
+      }
+
+      @Override
+      protected int getConfiguredWidth() {
+        return 120;
+      }
+    }
+
+    @Order(3000)
+    public class MacAddressColumn extends AbstractStringColumn {
+
+      @Override
+      protected String getConfiguredHeaderText() {
+        return TEXTS.get("MacAddress");
+      }
+
+      @Override
+      protected int getConfiguredWidth() {
+        return 140;
+      }
+    }
+
+    @Order(4000)
     public class LocationColumn extends AbstractStringColumn {
       @Override
       protected String getConfiguredHeaderText() {
@@ -90,7 +130,7 @@ public class DeviceTablePage extends AbstractPageWithTable<Table> {
       }
     }
 
-    @Order(3000)
+    @Order(5000)
     public class BatchNrColumn extends AbstractStringColumn {
       @Override
       protected String getConfiguredHeaderText() {
@@ -103,7 +143,7 @@ public class DeviceTablePage extends AbstractPageWithTable<Table> {
       }
     }
 
-    @Order(4000)
+    @Order(6000)
     public class StatusColumn extends AbstractSmartColumn<String> {
       @Override
       protected String getConfiguredHeaderText() {
@@ -129,7 +169,7 @@ public class DeviceTablePage extends AbstractPageWithTable<Table> {
       }
     }
 
-    @Order(5000)
+    @Order(7000)
     public class FillLevelColumn extends AbstractLongColumn {
       @Override
       protected String getConfiguredHeaderText() {
@@ -145,28 +185,8 @@ public class DeviceTablePage extends AbstractPageWithTable<Table> {
       protected void execDecorateCell(Cell cell, ITableRow row) {
         Long fillLevel = getValue(row);
         if (null != fillLevel) {
-          String icon = null;
-          String fontColor = null;
-          if (fillLevel >= 0L && fillLevel < 13L) {
-            icon = Icons.BatteryEmpty;
-            fontColor = "FF6060";
-          }
-          else if (fillLevel >= 13L && fillLevel < 38L) {
-            icon = Icons.BatteryQuater;
-            fontColor = "FDAD4F";
-          }
-          else if (fillLevel >= 38L && fillLevel < 63L) {
-            icon = Icons.BatteryHalf;
-            fontColor = "0DAF66";
-          }
-          else if (fillLevel >= 63L && fillLevel < 88L) {
-            icon = Icons.BatteryThreeQuater;
-            fontColor = "0DAF66";
-          }
-          else if (fillLevel >= 88L) {
-            icon = Icons.BatteryFull;
-            fontColor = "0DAF66";
-          }
+          String icon = DeviceFormattingUtility.getFillLevelIconId(fillLevel);
+          String fontColor = DeviceFormattingUtility.getFillLevelForegroundColor(fillLevel);
 
           if (StringUtility.hasText(icon)) {
             cell.setIconId(icon);

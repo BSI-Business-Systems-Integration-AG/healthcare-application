@@ -18,7 +18,7 @@
   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
   version="3.0">
 
-  <display-name>FX Trading Network Application HTML UI</display-name>
+  <display-name>Healthcare Application HTML UI</display-name>
 
   <!-- Platform Startup listener -->
   <listener>

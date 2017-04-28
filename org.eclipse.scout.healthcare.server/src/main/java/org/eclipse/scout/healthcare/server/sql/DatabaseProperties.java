@@ -70,4 +70,16 @@ public class DatabaseProperties {
       return "healthcare.superuser";
     }
   }
+
+  public static class EnableNetworkServerControl extends AbstractBooleanConfigProperty {
+    @Override
+    protected Boolean getDefaultValue() {
+      return Boolean.FALSE;
+    }
+
+    @Override
+    public String getKey() {
+      return "healthcare.database.networkservercontrol.enabled";
+    }
+  }
 }

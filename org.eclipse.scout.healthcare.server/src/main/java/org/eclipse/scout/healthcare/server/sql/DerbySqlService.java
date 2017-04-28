@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.scout.healthcare.server.sql;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -42,6 +43,28 @@ public class DerbySqlService extends AbstractDerbySqlService {
       DriverManager.getConnection(jdbcMappingName + ";drop=true");
     }
     catch (SQLException e) {
+      BEANS.get(PlatformExceptionTranslator.class).translate(e);
+    }
+  }
+
+  @Override
+  protected void execAfterConnectionCreated(Connection conn) {
+    try {
+//      Deactivated for building because of duplicate-finder-maven-plugin:
+//      [WARNING] Found duplicate (but equal) classes in [org.apache.derby:derby:10.13.1.1, org.apache.derby:derbynet:10.13.1.1]:
+//      [WARNING]   org.apache.derby.impl.tools.sysinfo.Main
+//      [WARNING]   org.apache.derby.impl.tools.sysinfo.ZipInfoProperties
+//      [WARNING]   org.apache.derby.shared.common.error.MessageUtils
+//      [WARNING]   org.apache.derby.shared.common.error.ShutdownException
+//      [WARNING]   org.apache.derby.shared.common.reference.MessageId
+//      [WARNING]   org.apache.derby.tools.sysinfo
+//      [WARNING] Found duplicate classes/resources in compile classpath.
+//      if (CONFIG.getPropertyValue(DatabaseProperties.EnableNetworkServerControl.class)) {
+//        NetworkServerControl nsc = new NetworkServerControl(InetAddress.getByName("localhost"), 1527);
+//        nsc.start(new PrintWriter(System.out, true));
+//      }
+    }
+    catch (Exception e) {
       BEANS.get(PlatformExceptionTranslator.class).translate(e);
     }
   }

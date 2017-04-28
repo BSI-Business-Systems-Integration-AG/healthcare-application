@@ -50,17 +50,32 @@
       <artifactId>org.eclipse.scout.rt.server.jdbc</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.derby</groupId>
-      <artifactId>derby</artifactId>
-      <version>10.11.1.1</version>
+    	<groupId>org.apache.derby</groupId>
+    	<artifactId>derby</artifactId>
+    	<version>10.13.1.1</version>
     </dependency>
+    <!-- Deactivated for building because of duplicate-finder-maven-plugin -->
+    <!-- <dependency>
+    	<groupId>org.apache.derby</groupId>
+    	<artifactId>derbynet</artifactId>
+    	<version>10.13.1.1</version>
+    </dependency> -->
+  <!-- end::Derby[] -->
     <dependency>
 	  <groupId>org.web3j</groupId>
 	  <artifactId>core</artifactId>
 	  <version>2.0.2</version>
 	</dependency>
+	    <dependency>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>animal-sniffer-annotations</artifactId>
+      <version>1.15</version>
+      <optional>true</optional>
+      <!-- if you are using badly written maven plugins then blame them and add
+      <scope>provided</scope>
+      -->    
+    </dependency>
   </dependencies>
-  <!-- end::Derby[] -->
   <build>
   	<pluginManagement>
   		<plugins>

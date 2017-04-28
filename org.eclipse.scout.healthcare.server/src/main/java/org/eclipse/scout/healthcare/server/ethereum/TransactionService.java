@@ -3,11 +3,7 @@ package org.eclipse.scout.healthcare.server.ethereum;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import org.eclipse.scout.rt.platform.BEANS;
-import org.eclipse.scout.rt.platform.config.CONFIG;
-import org.eclipse.scout.rt.platform.util.CompareUtility;
-import org.eclipse.scout.rt.platform.util.StringUtility;
-import org.eclipse.scout.rt.shared.services.common.jdbc.SearchFilter;
+import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
 import org.eclipse.scout.healthcare.server.ethereum.EthereumProperties.EthereumClientProperty;
 import org.eclipse.scout.healthcare.server.ethereum.model.Account;
 import org.eclipse.scout.healthcare.server.ethereum.model.Transaction;
@@ -18,6 +14,11 @@ import org.eclipse.scout.healthcare.shared.ethereum.TransactionFormData;
 import org.eclipse.scout.healthcare.shared.ethereum.TransactionStatusLookupCall;
 import org.eclipse.scout.healthcare.shared.ethereum.TransactionTablePageData;
 import org.eclipse.scout.healthcare.shared.ethereum.TransactionTablePageData.TransactionTableRowData;
+import org.eclipse.scout.rt.platform.BEANS;
+import org.eclipse.scout.rt.platform.config.CONFIG;
+import org.eclipse.scout.rt.platform.util.CompareUtility;
+import org.eclipse.scout.rt.platform.util.StringUtility;
+import org.eclipse.scout.rt.shared.services.common.jdbc.SearchFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.web3j.protocol.core.methods.request.RawTransaction;
@@ -35,6 +36,7 @@ public class TransactionService implements ITransactionService {
   }
 
   @Override
+  @IgnoreJRERequirement
   public TransactionTablePageData getTransactionTableData(SearchFilter filter, String address) {
     TransactionTablePageData pageData = new TransactionTablePageData();
 

@@ -1,5 +1,5 @@
 /*!
-* FX Trading Network
+* Healthcare
 * https://www.bsi-software.com
 *
 * Copyright (c) BSI Business Systems Integration AG. All rights reserved.

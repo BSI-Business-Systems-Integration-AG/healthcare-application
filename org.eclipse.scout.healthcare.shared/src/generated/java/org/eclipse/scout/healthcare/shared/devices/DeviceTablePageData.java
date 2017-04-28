@@ -51,23 +51,43 @@ public class DeviceTablePageData extends AbstractTablePageData {
   public static class DeviceTableRowData extends AbstractTableRowData {
 
     private static final long serialVersionUID = 1L;
-    public static final String deviceNr = "deviceNr";
+    public static final String deviceId = "deviceId";
+    public static final String deviceName = "deviceName";
+    public static final String macAddress = "macAddress";
     public static final String location = "location";
     public static final String batchNr = "batchNr";
     public static final String status = "status";
     public static final String fillLevel = "fillLevel";
-    private String m_deviceNr;
+    private String m_deviceId;
+    private String m_deviceName;
+    private String m_macAddress;
     private String m_location;
     private String m_batchNr;
     private String m_status;
     private Long m_fillLevel;
 
-    public String getDeviceNr() {
-      return m_deviceNr;
+    public String getDeviceId() {
+      return m_deviceId;
     }
 
-    public void setDeviceNr(String newDeviceNr) {
-      m_deviceNr = newDeviceNr;
+    public void setDeviceId(String newDeviceId) {
+      m_deviceId = newDeviceId;
+    }
+
+    public String getDeviceName() {
+      return m_deviceName;
+    }
+
+    public void setDeviceName(String newDeviceName) {
+      m_deviceName = newDeviceName;
+    }
+
+    public String getMacAddress() {
+      return m_macAddress;
+    }
+
+    public void setMacAddress(String newMacAddress) {
+      m_macAddress = newMacAddress;
     }
 
     public String getLocation() {

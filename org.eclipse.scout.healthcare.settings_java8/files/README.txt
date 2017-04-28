@@ -5,4 +5,4 @@ If the project has set the Java version to 8, following files is different:
 
 Required by:
 ============
-Scout FX Trading Network Application
+Scout Healthcare Application
