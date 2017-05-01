@@ -43,13 +43,11 @@ import org.eclipse.scout.rt.platform.util.NumberUtility;
 import org.eclipse.scout.rt.platform.util.StringUtility;
 import org.eclipse.scout.rt.shared.TEXTS;
 import org.eclipse.scout.rt.shared.services.common.code.ICode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @FormData(value = DeviceOverviewFormData.class, sdkCommand = FormData.SdkCommand.CREATE)
 public class DeviceOverviewForm extends AbstractForm {
 
-  private static final Logger LOG = LoggerFactory.getLogger(DeviceOverviewForm.class);
+//  private static final Logger LOG = LoggerFactory.getLogger(DeviceOverviewForm.class);
 
   private String m_deviceId;
 

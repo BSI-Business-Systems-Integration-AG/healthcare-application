@@ -23,13 +23,11 @@ import org.eclipse.scout.rt.platform.util.CollectionUtility;
 import org.eclipse.scout.rt.shared.TEXTS;
 import org.eclipse.scout.rt.shared.services.common.jdbc.SearchFilter;
 import org.eclipse.scout.rt.shared.services.lookup.ILookupCall;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Data(TransactionTablePageData.class)
 public class TransactionTablePage extends AbstractPageWithTable<Table> {
 
-  private static final Logger LOG = LoggerFactory.getLogger(TransactionTablePage.class);
+//  private static final Logger LOG = LoggerFactory.getLogger(TransactionTablePage.class);
 
   private String address;
 

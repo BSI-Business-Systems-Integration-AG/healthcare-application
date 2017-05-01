@@ -24,14 +24,7 @@ public interface PersonSQLs {
 
   String LOOKUP = ""
       + "SELECT   person_id, "
-      + "         CASE "
-      + "           WHEN first_name IS null "
-      + "            THEN last_name "
-      + "           WHEN last_name IS null "
-      + "            THEN first_name "
-      + "           ELSE "
-      + "            first_name || ' ' || last_name "
-      + "         END "
+      + "         first_name || ' ' || last_name "
       + "FROM     PERSON "
       + "WHERE    1 = 1 "
       + "<key>    AND person_id = :key</key> "
@@ -200,5 +193,8 @@ public interface PersonSQLs {
       + "          null, "
       + "          null, "
       + "          'OCCUPATION.NURSE')";
+
+  String SELECT_RANDOM = ""
+      + "SELECT person_id FROM PERSON ORDER BY RANDOM() INTO :employee";
 
 }

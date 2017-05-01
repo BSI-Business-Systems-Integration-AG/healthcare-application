@@ -11,7 +11,6 @@
 package org.eclipse.scout.healthcare.server.sql;
 
 public interface IDataStoreService {
-
   void dropDataStore();
 
   void createDataStore();

@@ -55,6 +55,25 @@ public interface DeviceSQLs {
       + "         :{page.macAddress}, "
       + "         :{page.deviceName}";
 
+  String LOOKUP = ""
+      + "SELECT   device_id, "
+      + "         CASE "
+      + "           WHEN name IS NULL "
+      + "            THEN mac "
+      + "           ELSE "
+      + "             name || ' (' || mac || ')' "
+      + "         END "
+      + "FROM     DEVICE "
+      + "WHERE    1 = 1 "
+      + "<key>    "
+      + "AND      device_id = :key "
+      + "</key>   "
+      + "<text>   "
+      + "AND      (UPPER(name) LIKE UPPER('%'||:text||'%') "
+      + "          OR UPPER(mac) LIKE UPPER('%'||:text||'%')) "
+      + "</text>  "
+      + "<all> </all> ";
+
   String INSERT_SAMPLE = ""
       + "INSERT   INTO DEVICE "
       + "         (device_id, "
@@ -197,5 +216,8 @@ public interface DeviceSQLs {
       + "         :bottelingDateData, "
       + "         :expirationDateData, "
       + "         :fillLevel ";
+
+  String SELECT_RANDOM = ""
+      + "SELECT device_id FROM DEVICE ORDER BY RANDOM() INTO :device";
 
 }

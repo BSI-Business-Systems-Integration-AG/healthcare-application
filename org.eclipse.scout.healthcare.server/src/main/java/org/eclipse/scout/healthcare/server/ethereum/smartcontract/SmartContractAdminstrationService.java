@@ -4,12 +4,10 @@ import org.eclipse.scout.healthcare.client.ethereum.smartcontract.SmartContractA
 import org.eclipse.scout.healthcare.client.ethereum.smartcontract.SmartContractAdministrationTablePageData;
 import org.eclipse.scout.healthcare.shared.ethereum.smartcontract.ISmartContractAdminstrationService;
 import org.eclipse.scout.rt.server.jdbc.SQL;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SmartContractAdminstrationService implements ISmartContractAdminstrationService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(SmartContractAdminstrationService.class);
+//  private static final Logger LOG = LoggerFactory.getLogger(SmartContractAdminstrationService.class);
 
   @Override
   public SmartContractAdministrationTablePageData loadTableData() {
