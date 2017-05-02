@@ -3,7 +3,7 @@ package org.eclipse.scout.healthcare.server.ethereum;
 import java.io.File;
 import java.math.BigDecimal;
 
-import org.eclipse.scout.healthcare.server.ethereum.EthereumProperties.EthereumWalletLocation;
+import org.eclipse.scout.healthcare.server.ethereum.EthereumProperties.EthereumWalletLocationProperty;
 import org.eclipse.scout.healthcare.server.ethereum.model.Account;
 import org.eclipse.scout.healthcare.server.sql.AccountSQLs;
 import org.eclipse.scout.healthcare.shared.ethereum.AccountFormData;
@@ -69,7 +69,7 @@ public class AccountService implements IAccountService {
   }
 
   private String createWalletPath() {
-    String path = CONFIG.getPropertyValue(EthereumWalletLocation.class);
+    String path = CONFIG.getPropertyValue(EthereumWalletLocationProperty.class);
     if (StringUtility.isNullOrEmpty(path)) {
       try {
         File tmpFile = File.createTempFile("tmp", ".txt");

@@ -320,8 +320,8 @@ public class DeviceOverviewForm extends AbstractForm {
       @Order(2000)
       public class ImageBox extends AbstractGroupBox {
 
-        public static final String DESINFECTION_DEVICE = "images/desinfection_device.png";
-        public static final String DESINFECTION_DEVICE_FILENAME = "desinfection_device.png";
+        public static final String DISINFECTION_DEVICE = "images/disinfection_device.png";
+        public static final String DISINFECTION_DEVICE_FILENAME = "disinfection_device.png";
 
         @Override
         protected String getConfiguredLabel() {
@@ -370,9 +370,9 @@ public class DeviceOverviewForm extends AbstractForm {
           protected void execInitField() {
             clearErrorStatus();
 
-            try (InputStream in = ResourceBase.class.getResourceAsStream(DESINFECTION_DEVICE)) {
+            try (InputStream in = ResourceBase.class.getResourceAsStream(DISINFECTION_DEVICE)) {
               setImage(IOUtility.readBytes(in));
-              setImageId(DESINFECTION_DEVICE_FILENAME);
+              setImageId(DISINFECTION_DEVICE_FILENAME);
             }
             catch (Exception e) {
               e.printStackTrace();

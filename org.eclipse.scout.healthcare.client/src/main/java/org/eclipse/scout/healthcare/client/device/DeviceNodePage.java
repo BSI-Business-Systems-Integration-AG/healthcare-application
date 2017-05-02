@@ -2,7 +2,7 @@ package org.eclipse.scout.healthcare.client.device;
 
 import java.util.List;
 
-import org.eclipse.scout.healthcare.client.desinfection.DesinfectionTablePage;
+import org.eclipse.scout.healthcare.client.disinfection.DisinfectionTablePage;
 import org.eclipse.scout.rt.client.ui.desktop.outline.pages.AbstractPageWithNodes;
 import org.eclipse.scout.rt.client.ui.desktop.outline.pages.IPage;
 import org.eclipse.scout.rt.platform.util.StringUtility;
@@ -27,9 +27,9 @@ public class DeviceNodePage extends AbstractPageWithNodes {
 
   @Override
   protected void execCreateChildPages(List<IPage<?>> pageList) {
-    DesinfectionTablePage desinfectionPage = new DesinfectionTablePage();
-    desinfectionPage.setDeviceId(m_deviceId);
-    pageList.add(desinfectionPage);
+    DisinfectionTablePage disinfectionPage = new DisinfectionTablePage();
+    disinfectionPage.setDeviceId(m_deviceId);
+    pageList.add(disinfectionPage);
   }
 
   @Override

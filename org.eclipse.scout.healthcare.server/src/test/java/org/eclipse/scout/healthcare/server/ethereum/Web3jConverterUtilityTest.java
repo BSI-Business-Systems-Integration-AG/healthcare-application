@@ -30,6 +30,34 @@ public class Web3jConverterUtilityTest {
    * {@link org.eclipse.scout.healthcare.server.ethereum.Web3jConvertUtility#convertType(java.lang.Object, java.lang.Class)}.
    */
   @Test
+  public void testConvertTypeIntegerToUint256() {
+    Integer value = 125;
+    Object convertedObject = Web3jConvertUtility.convertType(value, Uint256.class);
+    assertTrue(convertedObject instanceof Uint256);
+    Uint256 convertedValue = (Uint256) convertedObject;
+    Uint256 testValue = new Uint256(BigInteger.valueOf(value.longValue()));
+    assertTrue(testValue.equals(convertedValue));
+  }
+
+  /**
+   * Test method for
+   * {@link org.eclipse.scout.healthcare.server.ethereum.Web3jConvertUtility#convertType(java.lang.Object, java.lang.Class)}.
+   */
+  @Test
+  public void testConvertTypeIntToUint256() {
+    int value = 125;
+    Object convertedObject = Web3jConvertUtility.convertType(value, Uint256.class);
+    assertTrue(convertedObject instanceof Uint256);
+    Uint256 convertedValue = (Uint256) convertedObject;
+    Uint256 testValue = new Uint256(BigInteger.valueOf(Integer.valueOf(value).longValue()));
+    assertTrue(testValue.equals(convertedValue));
+  }
+
+  /**
+   * Test method for
+   * {@link org.eclipse.scout.healthcare.server.ethereum.Web3jConvertUtility#convertType(java.lang.Object, java.lang.Class)}.
+   */
+  @Test
   public void testConvertTypeDateToUint256() {
     Long timestamp = System.currentTimeMillis() / 1000L;
     Date value = new Date(timestamp);

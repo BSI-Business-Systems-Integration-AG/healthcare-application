@@ -18,7 +18,8 @@ import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
 import org.eclipse.scout.healthcare.server.ethereum.EthereumProperties.EthereumClientIpProperty;
 import org.eclipse.scout.healthcare.server.ethereum.EthereumProperties.EthereumClientPortProperty;
 import org.eclipse.scout.healthcare.server.ethereum.EthereumProperties.EthereumClientProperty;
-import org.eclipse.scout.healthcare.server.ethereum.EthereumProperties.EthereumWalletLocation;
+import org.eclipse.scout.healthcare.server.ethereum.EthereumProperties.EthereumDefaultAccountProperty;
+import org.eclipse.scout.healthcare.server.ethereum.EthereumProperties.EthereumWalletLocationProperty;
 import org.eclipse.scout.healthcare.server.ethereum.model.Account;
 import org.eclipse.scout.healthcare.server.ethereum.model.Alice;
 import org.eclipse.scout.healthcare.server.ethereum.model.Transaction;
@@ -92,7 +93,10 @@ public class EthereumService {
         LOG.info("coinbase: " + from + ", balance: " + balance.toString());
         rpc_coinbase = from;
 
-        String contractOwnerAdress = Alice.ADDRESS;
+        String contractOwnerAdress = CONFIG.getPropertyValue(EthereumDefaultAccountProperty.class);
+        if (StringUtility.isNullOrEmpty(contractOwnerAdress)) {
+          contractOwnerAdress = Alice.ADDRESS;
+        }
         if (getBalance(contractOwnerAdress).compareTo(Convert.toWei("10", Convert.Unit.ETHER)) < 0) {
           transferEther(rpc_coinbase, contractOwnerAdress, Convert.toWei("10", Convert.Unit.ETHER).toBigInteger());
         }
@@ -394,7 +398,7 @@ public class EthereumService {
       address = StringUtility.substring(address, 2);
     }
 
-    String walletLocation = CONFIG.getPropertyValue(EthereumWalletLocation.class);
+    String walletLocation = CONFIG.getPropertyValue(EthereumWalletLocationProperty.class);
     if (StringUtility.hasText(walletLocation)) {
       File walletDictionary = new File(walletLocation);
       List<File> wallets = null;

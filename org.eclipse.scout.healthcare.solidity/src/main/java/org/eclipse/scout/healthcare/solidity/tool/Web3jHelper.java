@@ -26,8 +26,8 @@ public final class Web3jHelper {
 	public static final BigInteger GAS_PRICE_DEFAULT = BigInteger.valueOf(20_000_000_000L);
 	public static final BigInteger GAS_LIMIT_DEFAULT = BigInteger.valueOf(4_700_000L);
 	
-//	public static final String IP_ADDRESS = "192.168.99.100";
-	public static final String IP_ADDRESS = "127.0.0.1";
+	public static final String IP_ADDRESS = "192.168.99.100";
+//	public static final String IP_ADDRESS = "127.0.0.1";
 	public static final String PORT = "8545";
 	
 	private static Web3j web3j = null;

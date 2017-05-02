@@ -64,7 +64,7 @@ public class DeviceStatusCodeType extends AbstractCodeType<String, String> {
 
     @Override
     protected String getConfiguredForegroundColor() {
-      return "FDAD4F";
+      return "FF6060";
     }
 
     @Override
@@ -85,7 +85,7 @@ public class DeviceStatusCodeType extends AbstractCodeType<String, String> {
 
     @Override
     protected String getConfiguredForegroundColor() {
-      return "FF6060";
+      return "FDAD4F";
     }
 
     @Override

@@ -36,7 +36,7 @@ public class EthereumProperties {
 
   }
 
-  public static class EthereumWalletLocation extends AbstractStringConfigProperty {
+  public static class EthereumWalletLocationProperty extends AbstractStringConfigProperty {
 
     @Override
     public String getKey() {
@@ -45,11 +45,20 @@ public class EthereumProperties {
 
   }
 
-  public static class EthereumDefaultAccount extends AbstractStringConfigProperty {
+  public static class EthereumDefaultAccountProperty extends AbstractStringConfigProperty {
 
     @Override
     public String getKey() {
       return "healthcare.ethereum.default.account";
+    }
+
+  }
+
+  public static class EthereumDefaultAccountPasswordProperty extends AbstractStringConfigProperty {
+
+    @Override
+    public String getKey() {
+      return "healthcare.ethereum.default.account.password";
     }
 
   }

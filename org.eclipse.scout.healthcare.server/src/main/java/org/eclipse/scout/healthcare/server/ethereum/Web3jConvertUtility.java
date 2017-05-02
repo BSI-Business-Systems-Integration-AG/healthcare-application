@@ -63,9 +63,21 @@ public final class Web3jConvertUtility {
   private static final int ABI_ADDRESS = 1006;
   private static final int ABI_UTF8STRING = 1007;
 
+  private final Map<Class, Class> m_wrapperTypeMap = new HashMap<Class, Class>();
   private final Map<Class, Integer> m_typeMap = new HashMap<Class, Integer>();
+  private final Map<Class, Integer> m_primitiveTypeMap = new HashMap<Class, Integer>();
 
   private Web3jConvertUtility() {
+    m_wrapperTypeMap.put(char.class, Character.class);
+    m_wrapperTypeMap.put(byte.class, Byte.class);
+    m_wrapperTypeMap.put(boolean.class, Boolean.class);
+    m_wrapperTypeMap.put(short.class, Short.class);
+    m_wrapperTypeMap.put(int.class, Integer.class);
+    m_wrapperTypeMap.put(long.class, Long.class);
+    m_wrapperTypeMap.put(float.class, Float.class);
+    m_wrapperTypeMap.put(double.class, Double.class);
+    m_wrapperTypeMap.put(void.class, Void.class);
+
     m_typeMap.put(Character.class, Integer.valueOf(CHARACTER));
     m_typeMap.put(Byte.class, Integer.valueOf(BYTE));
     m_typeMap.put(Boolean.class, Integer.valueOf(BOOLEAN));
@@ -87,6 +99,15 @@ public final class Web3jConvertUtility {
     m_typeMap.put(Time.class, Integer.valueOf(SQLTIME));
     m_typeMap.put(Timestamp.class, Integer.valueOf(SQLTIMESTAMP));
     m_typeMap.put(Void.class, Integer.valueOf(VOID));
+
+    m_primitiveTypeMap.put(boolean.class, Integer.valueOf(BOOLEAN));
+    m_primitiveTypeMap.put(byte.class, Integer.valueOf(BYTE));
+    m_primitiveTypeMap.put(char.class, Integer.valueOf(CHARACTER));
+    m_primitiveTypeMap.put(short.class, Integer.valueOf(SHORT));
+    m_primitiveTypeMap.put(int.class, Integer.valueOf(INTEGER));
+    m_primitiveTypeMap.put(long.class, Integer.valueOf(LONG));
+    m_primitiveTypeMap.put(float.class, Integer.valueOf(FLOAT));
+    m_primitiveTypeMap.put(double.class, Integer.valueOf(DOUBLE));
   }
 
   @SuppressWarnings("unchecked")
@@ -99,11 +120,21 @@ public final class Web3jConvertUtility {
     return (S) instance.convertTypeImpl(type, clazz);
   }
 
+  @SuppressWarnings("unchecked")
   private Object convertTypeImpl(Object o, Class toType) {
     // null check
     if (o == null) {
+      // primitive null-representation
+      if (toType.isPrimitive()) {
+        return getPrimitiveNull(toType);
+      }
       return null;
     }
+    // get non-primitive type
+    if (toType.isPrimitive()) {
+      toType = getWrappedType(toType);
+    }
+
     // direct check
     if (toType.isInstance(o)) {
       return o;
@@ -199,6 +230,12 @@ public final class Web3jConvertUtility {
             return txDateToUint((Date) o, toType);
         }
         break;
+      case INTEGER:
+        switch (toId) {
+          case ABI_NUMERIC_UINT:
+            return txIntegerToUint((Integer) o, toType);
+        }
+        break;
     }
 
     throw createException(o, fromType, toType, 4, "not implementated");
@@ -237,6 +274,21 @@ public final class Web3jConvertUtility {
       cons = t.getConstructor(BigInteger.class);
       Long timestamp = o.getTime();
       uint = (T) cons.newInstance(BigInteger.valueOf(timestamp));
+    }
+    catch (Exception e) {
+      LOG.error(e.getMessage(), e);
+      createException(o, Long.class, t, 5, "Could not create an instance");
+    }
+    return uint;
+  }
+
+  @SuppressWarnings("unchecked")
+  private <T extends Uint> T txIntegerToUint(Integer o, Class<T> t) {
+    T uint = null;
+    Constructor<?> cons;
+    try {
+      cons = t.getConstructor(BigInteger.class);
+      uint = (T) cons.newInstance(BigInteger.valueOf(o.longValue()));
     }
     catch (Exception e) {
       LOG.error(e.getMessage(), e);
@@ -284,6 +336,67 @@ public final class Web3jConvertUtility {
       return ABI_UTF8STRING;
     }
     return 0;
+  }
+
+  /**
+   * type to typeId
+   */
+  private int getPrimitiveTypeId(Class type) {
+    Integer id = m_primitiveTypeMap.get(type);
+    if (id == null) {
+      return 0;
+    }
+    else {
+      return id.intValue();
+    }
+  }
+
+  /**
+   * wrapper type for primitive types
+   */
+  private Class getWrappedType(Class primitiveType) {
+    Class wrappedType = m_wrapperTypeMap.get(primitiveType);
+    return wrappedType;
+  }
+
+  /**
+   * Null representation of a primitive type (0,false)
+   */
+  @SuppressWarnings("unchecked")
+  private <T> T getPrimitiveNull(Class<T> primitiveType) {
+    int fromId = getPrimitiveTypeId(primitiveType);
+    if (fromId == 0) {
+      throw new IllegalArgumentException(primitiveType + " no primitive type");
+    }
+    switch (fromId) {
+      case BOOLEAN: {
+        return (T) Boolean.FALSE;
+      }
+      case BYTE: {
+        return (T) Byte.valueOf((byte) 0);
+      }
+      case CHARACTER: {
+        return (T) Character.valueOf('\u0000');
+      }
+      case SHORT: {
+        return (T) Short.valueOf((short) 0);
+      }
+      case INTEGER: {
+        return (T) Integer.valueOf(0);
+      }
+      case LONG: {
+        return (T) Long.valueOf(0L);
+      }
+      case FLOAT: {
+        return (T) Float.valueOf(0.0f);
+      }
+      case DOUBLE: {
+        return (T) Double.valueOf(0.0);
+      }
+      default: {
+        throw new IllegalArgumentException(primitiveType + " no primitive type");
+      }
+    }
   }
 
   /**
