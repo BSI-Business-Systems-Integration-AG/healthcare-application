@@ -220,4 +220,7 @@ public interface DeviceSQLs {
   String SELECT_RANDOM = ""
       + "SELECT device_id FROM DEVICE ORDER BY RANDOM() INTO :device";
 
+  String UPDATE_STATUS = ""
+      + "UPDATE DEVICE SET status = :status WHERE device_id = :deviceId";
+
 }

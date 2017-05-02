@@ -1,10 +1,11 @@
-package org.eclipse.scout.healthcare.server.disinfection;
+package org.eclipse.scout.healthcare.server.disinfection.tracker;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import org.eclipse.scout.healthcare.server.disinfection.HandDisinfectionTracker;
 import org.eclipse.scout.healthcare.server.disinfection.model.HandDisinfectionEvent;
 import org.eclipse.scout.healthcare.server.disinfection.tracker.HandDisinfectionTrackerProperties.HandDisinfectionTrackerAddressProperty;
 import org.eclipse.scout.healthcare.server.ethereum.EthereumProperties.EthereumDefaultAccountPasswordProperty;
@@ -105,11 +106,13 @@ public class HandDisinfectionEventTrackerService {
     }
 
     HandDisinfectionEvent event = null;
-    try {
-      event = HandDisinfectionEvent.parse(list);
-    }
-    catch (IllegalArgumentException e) {
-      LOG.error("Contract did not return expected list of values. Check contract or event implementation.", e);
+    if (null != list) {
+      try {
+        event = HandDisinfectionEvent.parse(list);
+      }
+      catch (IllegalArgumentException e) {
+        LOG.error("Contract did not return expected list of values. Check contract or event implementation.", e);
+      }
     }
 
     return event;

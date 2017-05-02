@@ -101,7 +101,7 @@ public class DeviceStatusCodeType extends AbstractCodeType<String, String> {
 
     @Override
     protected String getConfiguredText() {
-      return TEXTS.get("Desinfects");
+      return TEXTS.get("Disinfects");
     }
 
     @Override
