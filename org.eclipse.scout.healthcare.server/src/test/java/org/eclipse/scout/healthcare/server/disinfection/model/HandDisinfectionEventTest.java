@@ -43,10 +43,10 @@ public class HandDisinfectionEventTest {
     remoteTestEvent.add(new Uint256(BigInteger.valueOf(DURATION)));
 
     HandDisinfectionEvent testEvent = HandDisinfectionEvent.parse(remoteTestEvent);
-    assertTrue(EVENT_ID.equals(testEvent.getEventId()));
+    assertTrue(EVENT_ID.equals(testEvent.getEventNr()));
     assertTrue(DEVICE_ID.equals(testEvent.getDeviceId()));
     assertTrue(EMPLOYEE_ID.equals(testEvent.getEmployeeId()));
-    assertTrue(CHEMISTRY.equals(testEvent.getChemistry()));
+    assertTrue(CHEMISTRY.equals(testEvent.getCartridgeId()));
     assertTrue(TIMESTAMP.equals(testEvent.getEventTimestamp()));
     assertTrue(DURATION.equals(testEvent.getDuration()));
   }
@@ -153,10 +153,10 @@ public class HandDisinfectionEventTest {
   @Test
   public void testHandDisinfectionEvent() {
     HandDisinfectionEvent testEvent = new HandDisinfectionEvent(DEVICE_ID, EMPLOYEE_ID, CHEMISTRY, TIMESTAMP, DURATION);
-    assertNull(testEvent.getEventId());
+    assertNull(testEvent.getEventNr());
     assertTrue(DEVICE_ID.equals(testEvent.getDeviceId()));
     assertTrue(EMPLOYEE_ID.equals(testEvent.getEmployeeId()));
-    assertTrue(CHEMISTRY.equals(testEvent.getChemistry()));
+    assertTrue(CHEMISTRY.equals(testEvent.getCartridgeId()));
     assertTrue(TIMESTAMP.equals(testEvent.getEventTimestamp()));
     assertTrue(DURATION.equals(testEvent.getDuration()));
   }

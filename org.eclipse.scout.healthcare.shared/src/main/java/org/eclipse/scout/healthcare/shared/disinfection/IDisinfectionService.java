@@ -18,6 +18,8 @@ public interface IDisinfectionService extends IService {
    */
   DisinfectionTablePageData getDisinfectionTableData(SearchFilter filter);
 
+  void pollDisinfectionEvents();
+
   void startDisinfection(String deviceId);
 
   void endDisinfection(String deviceId, String employeeId, Long duration);

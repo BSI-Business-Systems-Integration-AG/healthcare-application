@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.scout.healthcare.server.sql.DeviceSQLs;
 import org.eclipse.scout.healthcare.server.sql.PersonSQLs;
+import org.eclipse.scout.healthcare.server.sql.SuperUserRunContextProducer;
 import org.eclipse.scout.healthcare.shared.disinfection.IDisinfectionService;
 import org.eclipse.scout.healthcare.shared.disinfection.simulation.HandDisinfectionEventSimulationFormData;
 import org.eclipse.scout.healthcare.shared.disinfection.simulation.IHandDisinfectionEventSimulationService;
@@ -39,7 +40,9 @@ public class HandDisinfectionEventSimulationService implements IHandDisinfection
         TimeUnit.MILLISECONDS.sleep(duration);
         simulateDisinfectionEnd(formData, duration);
       }
-    }, Jobs.newInput().withName(jobName));
+    }, Jobs.newInput()
+        .withName(jobName)
+        .withRunContext(BEANS.get(SuperUserRunContextProducer.class).produce()));
     return formData;
   }
 

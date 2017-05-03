@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
+import org.eclipse.scout.healthcare.server.disinfection.DisinfectionSQLs;
 import org.eclipse.scout.rt.platform.ApplicationScoped;
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.CreateImmediately;
@@ -93,6 +94,13 @@ public class DatabaseSetupService implements IDataStoreService {
     }
   }
 
+  public void createDisinfectionEventTable() {
+    if (!getExistingTables().contains("DISINFECTION_EVENT")) {
+      SQL.insert(DisinfectionSQLs.CREATE_TABLE);
+      LOG.info("Database table 'DISINFECTION_EVENT' created");
+    }
+  }
+
   private Set<String> getExistingTables() {
     StringArrayHolder tables = new StringArrayHolder();
     SQL.selectInto(SQLs.SELECT_TABLE_NAMES, new NVPair("result", tables));
@@ -104,6 +112,7 @@ public class DatabaseSetupService implements IDataStoreService {
     SQL.update(PersonSQLs.DROP_TABLE);
     SQL.update(DeviceSQLs.DROP_TABLE);
     SQL.update(DeviceSQLs.DROP_CARTRIDGE_TABLE);
+    SQL.update(DisinfectionSQLs.DROP_TABLE);
   }
 
   @Override
@@ -111,5 +120,6 @@ public class DatabaseSetupService implements IDataStoreService {
     createPersonTable();
     createDeviceTable();
     createCartridgeTable();
+    createDisinfectionEventTable();
   }
 }

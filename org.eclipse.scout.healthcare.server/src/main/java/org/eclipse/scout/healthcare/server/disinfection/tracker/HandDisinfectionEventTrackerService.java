@@ -66,7 +66,7 @@ public class HandDisinfectionEventTrackerService {
     try {
       TransactionReceipt receipt = getContract()
           .trackHandDisinfectionEvent(
-              event.getDeviceIdTyped(), event.getEmplyoeeIdTyped(), event.getChemistryTyped(), event.getEventTimestampTyped(), event.getDurationTyped())
+              event.getDeviceIdTyped(), event.getEmplyoeeIdTyped(), event.getCartridgeIdTyped(), event.getEventTimestampTyped(), event.getDurationTyped())
           .get();
       event.setTransactionHash(receipt.getTransactionHash());
     }
