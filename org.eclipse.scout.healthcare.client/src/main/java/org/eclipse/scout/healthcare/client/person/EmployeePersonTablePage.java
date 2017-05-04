@@ -55,5 +55,6 @@ public class EmployeePersonTablePage extends AbstractPersonTablePage<Table> {
   }
 
   public class Table extends AbstractPersonTablePage<Table>.Table {
+
   }
 }

@@ -11,5 +11,4 @@ import org.junit.runner.RunWith;
 @RunWithServerSession(AbstractServerSession.class)
 public class EmployeePersonServiceTest {
 
-  // TODO [uk] add test cases
 }

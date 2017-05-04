@@ -11,5 +11,4 @@ import org.junit.runner.RunWith;
 @RunWithServerSession(ServerSession.class)
 public class DisinfectionServiceTest {
 
-  // TODO [uko] add test cases
 }

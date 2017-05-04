@@ -422,4 +422,15 @@ public class EthereumService {
     return wallet;
   }
 
+  public String getEtherscanIoTrackingUrl(String address, String type) {
+    StringBuilder url = new StringBuilder("https://");
+    if (EthereumClientCodeType.TestnetCode.ID.equals(CONFIG.getPropertyValue(EthereumClientProperty.class))) {
+      url.append("rinkeby.");
+    }
+    url.append("etherscan.io/");
+    url.append(type + "/");
+    url.append(address);
+    return url.toString();
+  }
+
 }

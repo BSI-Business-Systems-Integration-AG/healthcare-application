@@ -705,7 +705,6 @@ public interface SQLs_ {
       + "             :{page.tradingAction}, "
       + "             :{page.status}, "
       + "             :{page.displayedDealNr} ";
-  //TODO remove organizationId/_id from DEAL_INSERT
   String DEAL_INSERT = ""
       + "INSERT     INTO "
       + "DEAL      (deal_id,organization_id) "

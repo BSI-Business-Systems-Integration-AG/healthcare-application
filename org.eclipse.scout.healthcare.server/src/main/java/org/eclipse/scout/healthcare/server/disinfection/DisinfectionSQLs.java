@@ -61,4 +61,5 @@ public interface DisinfectionSQLs {
       + "WHERE  disinfection_event_id = :eventId "
       + "INTO   :transactionHash, "
       + "       :transactionStatus ";
+
 }

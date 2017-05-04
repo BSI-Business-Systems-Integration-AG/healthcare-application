@@ -205,11 +205,6 @@ public class DisinfectionTablePage extends AbstractPageWithTable<Table> {
         return getTrackingUrlColumn();
       }
 
-      //TODO: [uko] remove. Only for demonstration
-      @Override
-      protected void execOwnerValueChanged(Object newOwnerValue) {
-        setEnabled(true);
-      }
     }
 
   }

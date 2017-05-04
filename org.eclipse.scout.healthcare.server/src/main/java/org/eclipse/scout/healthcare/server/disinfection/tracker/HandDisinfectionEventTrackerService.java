@@ -46,7 +46,7 @@ public class HandDisinfectionEventTrackerService {
    * @throws ExecutionException
    * @throws InterruptedException
    */
-  public String deploy(Credentials credentials, BigInteger gasPrice, BigInteger gasLimit)
+  private String deploy(Credentials credentials, BigInteger gasPrice, BigInteger gasLimit)
       throws InterruptedException, ExecutionException {
 
     HandDisinfectionTracker contract = HandDisinfectionTracker
@@ -58,6 +58,18 @@ public class HandDisinfectionEventTrackerService {
     m_contract = contract;
 
     return contract.getContractAddress();
+  }
+
+  public String getContractAddress() {
+    String contractAddress = "";
+    try {
+      contractAddress = getContract().getContractAddress();
+    }
+    catch (InterruptedException | ExecutionException e) {
+      // TODO Auto-generated catch block
+      LOG.error("Could not load contract address.", e);
+    }
+    return contractAddress;
   }
 
   public HandDisinfectionEvent trackHandDisinfectionEvent(HandDisinfectionEvent event) {

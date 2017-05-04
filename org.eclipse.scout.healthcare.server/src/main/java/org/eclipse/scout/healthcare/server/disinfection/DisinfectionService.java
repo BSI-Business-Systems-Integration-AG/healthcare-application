@@ -2,6 +2,7 @@ package org.eclipse.scout.healthcare.server.disinfection;
 
 import org.eclipse.scout.healthcare.server.disinfection.model.HandDisinfectionEvent;
 import org.eclipse.scout.healthcare.server.disinfection.tracker.HandDisinfectionEventTrackerService;
+import org.eclipse.scout.healthcare.server.ethereum.EthereumService;
 import org.eclipse.scout.healthcare.server.sql.SuperUserRunContextProducer;
 import org.eclipse.scout.healthcare.shared.disinfection.DisinfectionTablePageData;
 import org.eclipse.scout.healthcare.shared.disinfection.DisinfectionTablePageData.DisinfectionTableRowData;
@@ -29,7 +30,13 @@ public class DisinfectionService implements IDisinfectionService {
   @Override
   public DisinfectionTablePageData getDisinfectionTableData(SearchFilter filter, String deviceId) {
     DisinfectionTablePageData pageData = new DisinfectionTablePageData();
-    HandDisinfectionEvent[] events = BEANS.get(HandDisinfectionEventTrackerService.class).getAllHandDisinfectionEvents();
+    HandDisinfectionEventTrackerService service = BEANS.get(HandDisinfectionEventTrackerService.class);
+    HandDisinfectionEvent[] events = service.getAllHandDisinfectionEvents();
+    String contractAddress = service.getContractAddress();
+    String trackingUrl = "";
+    if (StringUtility.hasText(contractAddress)) {
+      trackingUrl = BEANS.get(EthereumService.class).getEtherscanIoTrackingUrl(contractAddress, "address");
+    }
     for (HandDisinfectionEvent e : events) {
       e = loadRemainingInfoForEvent(e);
       if (StringUtility.hasText(e.getEventId())) {
@@ -42,7 +49,7 @@ public class DisinfectionService implements IDisinfectionService {
           row.setDuration(e.getDuration());
           row.setEventId(e.getEventId());
           row.setStatus(e.getTransactionStatus());
-          //TODO: [uko] tracking url
+          row.setTrackingUrl(trackingUrl);
         }
       }
     }

@@ -11,5 +11,4 @@ import org.junit.runner.RunWith;
 @RunWithClientSession(TestEnvironmentClientSession.class)
 public class DeviceOverviewFormTest {
 
-  // TODO [uko] add test cases
 }
