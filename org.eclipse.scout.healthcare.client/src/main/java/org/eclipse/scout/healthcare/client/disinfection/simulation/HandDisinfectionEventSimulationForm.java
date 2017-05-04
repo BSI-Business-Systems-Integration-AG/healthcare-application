@@ -2,11 +2,11 @@ package org.eclipse.scout.healthcare.client.disinfection.simulation;
 
 import org.eclipse.scout.healthcare.client.disinfection.simulation.HandDisinfectionEventSimulationForm.MainBox.CancelButton;
 import org.eclipse.scout.healthcare.client.disinfection.simulation.HandDisinfectionEventSimulationForm.MainBox.EventInfoBox;
-import org.eclipse.scout.healthcare.client.disinfection.simulation.HandDisinfectionEventSimulationForm.MainBox.OkButton;
 import org.eclipse.scout.healthcare.client.disinfection.simulation.HandDisinfectionEventSimulationForm.MainBox.EventInfoBox.DeviceDisplayTextField;
 import org.eclipse.scout.healthcare.client.disinfection.simulation.HandDisinfectionEventSimulationForm.MainBox.EventInfoBox.DeviceField;
 import org.eclipse.scout.healthcare.client.disinfection.simulation.HandDisinfectionEventSimulationForm.MainBox.EventInfoBox.EmployeeDisplayTextField;
 import org.eclipse.scout.healthcare.client.disinfection.simulation.HandDisinfectionEventSimulationForm.MainBox.EventInfoBox.EmployeeField;
+import org.eclipse.scout.healthcare.client.disinfection.simulation.HandDisinfectionEventSimulationForm.MainBox.OkButton;
 import org.eclipse.scout.healthcare.shared.devices.DeviceLookupCall;
 import org.eclipse.scout.healthcare.shared.disinfection.simulation.HandDisinfectionEventSimulationFormData;
 import org.eclipse.scout.healthcare.shared.disinfection.simulation.IHandDisinfectionEventSimulationService;
@@ -212,8 +212,13 @@ public class HandDisinfectionEventSimulationForm extends AbstractForm {
       IHandDisinfectionEventSimulationService service = BEANS.get(IHandDisinfectionEventSimulationService.class);
       HandDisinfectionEventSimulationFormData formData = new HandDisinfectionEventSimulationFormData();
       exportFormData(formData);
-      formData = service.prepareSimulate(formData);
+      formData = service.prepareSimulate(formData, true);
       importFormData(formData);
+    }
+
+    @Override
+    protected void execPostLoad() {
+      touch();
     }
 
     @Override

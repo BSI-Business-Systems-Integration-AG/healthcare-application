@@ -16,12 +16,11 @@ public class HandDisinfectionEvent {
   private String m_eventId;
   private String m_deviceId;
   private String m_employeeId;
-  private String m_cartridgeId;
+  private String m_chemistry;
   private Date m_eventTimestamp;
   private Long m_duration;
   private String m_transactionHash;
-  private String m_transactionStatus;
-  private String m_eventStatus;
+  private int m_transactionStatus;
 
   public static HandDisinfectionEvent parse(List<Type> typeList) {
     HandDisinfectionEvent event = new HandDisinfectionEvent();
@@ -44,7 +43,7 @@ public class HandDisinfectionEvent {
     setEventId(UUID.randomUUID().toString());
     setDeviceId(deviceId);
     setEmployeeId(employeeId);
-    setCartridgeId(chemistry);
+    setChemistry(chemistry);
     setEventTimestamp(eventTimestamp);
     setDuration(duration);
   }
@@ -85,16 +84,16 @@ public class HandDisinfectionEvent {
     this.m_employeeId = employeeId;
   }
 
-  public String getCartridgeId() {
-    return m_cartridgeId;
+  public String getChemistry() {
+    return m_chemistry;
   }
 
-  public Utf8String getCartridgeIdTyped() {
-    return Web3jConvertUtility.convertType(m_cartridgeId, Utf8String.class);
+  public Utf8String getChemistryTyped() {
+    return Web3jConvertUtility.convertType(m_chemistry, Utf8String.class);
   }
 
-  private void setCartridgeId(String cartridgeId) {
-    this.m_cartridgeId = cartridgeId;
+  private void setChemistry(String chemistry) {
+    this.m_chemistry = chemistry;
   }
 
   public Date getEventTimestamp() {
@@ -129,24 +128,20 @@ public class HandDisinfectionEvent {
     m_transactionHash = transactionHash;
   }
 
-  public String getTransactionStatus() {
+  public int getTransactionStatus() {
     return m_transactionStatus;
   }
 
-  public void setTransactionStatus(String transactionStatus) {
+  public void setTransactionStatus(int transactionStatus) {
     m_transactionStatus = transactionStatus;
-  }
-
-  public String getEventStatus() {
-    return m_eventStatus;
-  }
-
-  public void setEventStatus(String eventStatus) {
-    m_eventStatus = eventStatus;
   }
 
   public String getEventId() {
     return m_eventId;
+  }
+
+  public Utf8String getEventIdTyped() {
+    return Web3jConvertUtility.convertType(m_eventId, Utf8String.class);
   }
 
   public void setEventId(String eventId) {
@@ -154,7 +149,7 @@ public class HandDisinfectionEvent {
   }
 
   private void parseInternal(List<Type> typeList) {
-    if (null == typeList || typeList.size() != 6) {
+    if (null == typeList || typeList.size() != 7) {
       throw new IllegalArgumentException("Type list has not the expected number of elements (6 elements expected).");
     }
 
@@ -176,7 +171,7 @@ public class HandDisinfectionEvent {
     if (!Utf8String.class.isInstance(typeList.get(3))) {
       throw new IllegalArgumentException("Expected element at index 3 to be of type Utf8String. Given type is " + typeList.get(3).getClass().getSimpleName());
     }
-    setCartridgeId(Web3jConvertUtility.convertType(typeList.get(3), String.class));
+    setChemistry(Web3jConvertUtility.convertType(typeList.get(3), String.class));
 
     if (!Uint256.class.isInstance(typeList.get(4))) {
       throw new IllegalArgumentException("Expected element at index 4 to be of type Uint246. Given type is " + typeList.get(4).getClass().getSimpleName());
@@ -184,8 +179,13 @@ public class HandDisinfectionEvent {
     setEventTimestamp(Web3jConvertUtility.convertType(typeList.get(4), Date.class));
 
     if (!Uint256.class.isInstance(typeList.get(5))) {
-      throw new IllegalArgumentException("Expected element at index 0 to be of type Uint246. Given type is " + typeList.get(5).getClass().getSimpleName());
+      throw new IllegalArgumentException("Expected element at index 5 to be of type Uint246. Given type is " + typeList.get(5).getClass().getSimpleName());
     }
     setDuration(Web3jConvertUtility.convertType(typeList.get(5), Long.class));
+
+    if (!Utf8String.class.isInstance(typeList.get(6))) {
+      throw new IllegalArgumentException("Expected element at index 6 to be of type Utf8String. Given type is " + typeList.get(6).getClass().getSimpleName());
+    }
+    setEventId(Web3jConvertUtility.convertType(typeList.get(6), String.class));
   }
 }

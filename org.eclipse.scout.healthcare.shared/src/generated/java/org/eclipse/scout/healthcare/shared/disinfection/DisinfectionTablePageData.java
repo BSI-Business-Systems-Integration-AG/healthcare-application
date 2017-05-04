@@ -57,13 +57,17 @@ public class DisinfectionTablePageData extends AbstractTablePageData {
     public static final String device = "device";
     public static final String employee = "employee";
     public static final String dateTime = "dateTime";
+    public static final String duration = "duration";
     public static final String status = "status";
+    public static final String eventId = "eventId";
     public static final String trackingUrl = "trackingUrl";
     private String m_transactionHash;
     private String m_device;
     private String m_employee;
     private Date m_dateTime;
-    private String m_status;
+    private Long m_duration;
+    private Integer m_status;
+    private String m_eventId;
     private String m_trackingUrl;
 
     public String getTransactionHash() {
@@ -98,12 +102,28 @@ public class DisinfectionTablePageData extends AbstractTablePageData {
       m_dateTime = newDateTime;
     }
 
-    public String getStatus() {
+    public Long getDuration() {
+      return m_duration;
+    }
+
+    public void setDuration(Long newDuration) {
+      m_duration = newDuration;
+    }
+
+    public Integer getStatus() {
       return m_status;
     }
 
-    public void setStatus(String newStatus) {
+    public void setStatus(Integer newStatus) {
       m_status = newStatus;
+    }
+
+    public String getEventId() {
+      return m_eventId;
+    }
+
+    public void setEventId(String newEventId) {
+      m_eventId = newEventId;
     }
 
     public String getTrackingUrl() {

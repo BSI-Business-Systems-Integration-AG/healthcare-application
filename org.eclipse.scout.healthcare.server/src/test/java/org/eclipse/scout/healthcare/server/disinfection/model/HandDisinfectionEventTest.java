@@ -27,6 +27,7 @@ public class HandDisinfectionEventTest {
   private static final String CHEMISTRY = "Chem 124";
   private static final Date TIMESTAMP = new Date(1493589856L);
   private static final Long DURATION = 9552L;
+  private static final String UUID = "019a270e-4885-415d-aafc-f6f879eb6683";
 
   /**
    * Test method for
@@ -41,14 +42,16 @@ public class HandDisinfectionEventTest {
     remoteTestEvent.add(new Utf8String(CHEMISTRY));
     remoteTestEvent.add(new Uint256(BigInteger.valueOf(TIMESTAMP.getTime())));
     remoteTestEvent.add(new Uint256(BigInteger.valueOf(DURATION)));
+    remoteTestEvent.add(new Utf8String(UUID));
 
     HandDisinfectionEvent testEvent = HandDisinfectionEvent.parse(remoteTestEvent);
     assertTrue(EVENT_ID.equals(testEvent.getEventNr()));
     assertTrue(DEVICE_ID.equals(testEvent.getDeviceId()));
     assertTrue(EMPLOYEE_ID.equals(testEvent.getEmployeeId()));
-    assertTrue(CHEMISTRY.equals(testEvent.getCartridgeId()));
+    assertTrue(CHEMISTRY.equals(testEvent.getChemistry()));
     assertTrue(TIMESTAMP.equals(testEvent.getEventTimestamp()));
     assertTrue(DURATION.equals(testEvent.getDuration()));
+    assertTrue(UUID.equals(testEvent.getEventId()));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -71,6 +74,7 @@ public class HandDisinfectionEventTest {
     remoteTestEvent.add(new Utf8String(CHEMISTRY));
     remoteTestEvent.add(new Uint256(BigInteger.valueOf(TIMESTAMP.getTime())));
     remoteTestEvent.add(new Uint256(BigInteger.valueOf(DURATION)));
+    remoteTestEvent.add(new Utf8String(UUID));
 
     @SuppressWarnings("unused")
     HandDisinfectionEvent testEvent = HandDisinfectionEvent.parse(remoteTestEvent);
@@ -85,6 +89,7 @@ public class HandDisinfectionEventTest {
     remoteTestEvent.add(new Utf8String(CHEMISTRY));
     remoteTestEvent.add(new Uint256(BigInteger.valueOf(TIMESTAMP.getTime())));
     remoteTestEvent.add(new Uint256(BigInteger.valueOf(DURATION)));
+    remoteTestEvent.add(new Utf8String(UUID));
 
     @SuppressWarnings("unused")
     HandDisinfectionEvent testEvent = HandDisinfectionEvent.parse(remoteTestEvent);
@@ -99,6 +104,7 @@ public class HandDisinfectionEventTest {
     remoteTestEvent.add(new Utf8String(CHEMISTRY));
     remoteTestEvent.add(new Uint256(BigInteger.valueOf(TIMESTAMP.getTime())));
     remoteTestEvent.add(new Uint256(BigInteger.valueOf(DURATION)));
+    remoteTestEvent.add(new Utf8String(UUID));
 
     @SuppressWarnings("unused")
     HandDisinfectionEvent testEvent = HandDisinfectionEvent.parse(remoteTestEvent);
@@ -113,6 +119,7 @@ public class HandDisinfectionEventTest {
     remoteTestEvent.add(new Uint256(BigInteger.ONE));
     remoteTestEvent.add(new Uint256(BigInteger.valueOf(TIMESTAMP.getTime())));
     remoteTestEvent.add(new Uint256(BigInteger.valueOf(DURATION)));
+    remoteTestEvent.add(new Utf8String(UUID));
 
     @SuppressWarnings("unused")
     HandDisinfectionEvent testEvent = HandDisinfectionEvent.parse(remoteTestEvent);
@@ -127,6 +134,7 @@ public class HandDisinfectionEventTest {
     remoteTestEvent.add(new Utf8String(CHEMISTRY));
     remoteTestEvent.add(new Uint128(BigInteger.valueOf(TIMESTAMP.getTime())));
     remoteTestEvent.add(new Uint256(BigInteger.valueOf(DURATION)));
+    remoteTestEvent.add(new Utf8String(UUID));
 
     @SuppressWarnings("unused")
     HandDisinfectionEvent testEvent = HandDisinfectionEvent.parse(remoteTestEvent);
@@ -141,6 +149,22 @@ public class HandDisinfectionEventTest {
     remoteTestEvent.add(new Utf8String(CHEMISTRY));
     remoteTestEvent.add(new Uint256(BigInteger.valueOf(TIMESTAMP.getTime())));
     remoteTestEvent.add(new Uint128(BigInteger.valueOf(DURATION)));
+    remoteTestEvent.add(new Utf8String(UUID));
+
+    @SuppressWarnings("unused")
+    HandDisinfectionEvent testEvent = HandDisinfectionEvent.parse(remoteTestEvent);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testParseTypeAtIndex6() {
+    List<Type> remoteTestEvent = new ArrayList<Type>();
+    remoteTestEvent.add(new Uint256(BigInteger.valueOf(EVENT_ID)));
+    remoteTestEvent.add(new Utf8String(DEVICE_ID));
+    remoteTestEvent.add(new Utf8String(EMPLOYEE_ID));
+    remoteTestEvent.add(new Utf8String(CHEMISTRY));
+    remoteTestEvent.add(new Uint256(BigInteger.valueOf(TIMESTAMP.getTime())));
+    remoteTestEvent.add(new Uint128(BigInteger.valueOf(DURATION)));
+    remoteTestEvent.add(new Uint256(BigInteger.ONE));
 
     @SuppressWarnings("unused")
     HandDisinfectionEvent testEvent = HandDisinfectionEvent.parse(remoteTestEvent);
@@ -156,9 +180,10 @@ public class HandDisinfectionEventTest {
     assertNull(testEvent.getEventNr());
     assertTrue(DEVICE_ID.equals(testEvent.getDeviceId()));
     assertTrue(EMPLOYEE_ID.equals(testEvent.getEmployeeId()));
-    assertTrue(CHEMISTRY.equals(testEvent.getCartridgeId()));
+    assertTrue(CHEMISTRY.equals(testEvent.getChemistry()));
     assertTrue(TIMESTAMP.equals(testEvent.getEventTimestamp()));
     assertTrue(DURATION.equals(testEvent.getDuration()));
+    assertTrue(null != testEvent.getEventId() && !"".equals(testEvent.getEventId()));
   }
 
 }

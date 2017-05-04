@@ -8,13 +8,13 @@ contract HandDisinfectionTracker {
         string chemistry;
         uint256 timestamp;
         uint256 duration;
+        string eventUuid;
     }
 
     address owner;
 
     uint256 eventIdSequence;
-    HandDisinfectionEvent [] public DisinfectionEvents;
-
+    HandDisinfectionEvent [] public disinfectionEvents;
 
     function HandDisinfectionTracker () {
         owner = msg.sender;
@@ -28,13 +28,13 @@ contract HandDisinfectionTracker {
     }
 
     function trackHandDisinfectionEvent(string _deviceId, string _employeeId,
-        string _chemistry, uint256 _timestamp, uint256 _duration) {
+        string _chemistry, uint256 _timestamp, uint256 _duration, string _eventUuid) {
         checkAccess(msg.sender);
 
         HandDisinfectionEvent memory DisinfectionEvent =
-            HandDisinfectionEvent(eventIdSequence++, _deviceId, _employeeId, _chemistry, _timestamp, _duration);
+            HandDisinfectionEvent(eventIdSequence++, _deviceId, _employeeId, _chemistry, _timestamp, _duration, _eventUuid);
 
-        DisinfectionEvents.push(DisinfectionEvent);
+        disinfectionEvents.push(DisinfectionEvent);
     }
 
     function checkAccess(address sender) private {

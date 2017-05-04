@@ -1,20 +1,27 @@
 package org.eclipse.scout.healthcare.client.disinfection.simulation;
 
+import java.util.List;
+
 import org.eclipse.scout.healthcare.client.ClientSession;
 import org.eclipse.scout.healthcare.client.Icons;
 import org.eclipse.scout.healthcare.client.StandardOutline;
+import org.eclipse.scout.healthcare.client.device.DeviceNodePage;
 import org.eclipse.scout.healthcare.client.device.DeviceTablePage;
+import org.eclipse.scout.healthcare.client.disinfection.simulation.HandDisinfectionSimulationProperties.HandDisinfectionSimulationShowFormProperty;
 import org.eclipse.scout.healthcare.shared.disinfection.simulation.HandDisinfectionEventSimulationFormData;
 import org.eclipse.scout.healthcare.shared.disinfection.simulation.IHandDisinfectionEventSimulationService;
 import org.eclipse.scout.rt.client.ui.action.keystroke.IKeyStroke;
 import org.eclipse.scout.rt.client.ui.action.menu.AbstractMenu;
+import org.eclipse.scout.rt.client.ui.basic.tree.ITreeNode;
 import org.eclipse.scout.rt.client.ui.desktop.IDesktop;
 import org.eclipse.scout.rt.client.ui.desktop.notification.DesktopNotification;
 import org.eclipse.scout.rt.client.ui.desktop.outline.IOutline;
 import org.eclipse.scout.rt.client.ui.desktop.outline.pages.IPage;
 import org.eclipse.scout.rt.platform.BEANS;
+import org.eclipse.scout.rt.platform.config.CONFIG;
 import org.eclipse.scout.rt.platform.status.IStatus;
 import org.eclipse.scout.rt.platform.status.Status;
+import org.eclipse.scout.rt.platform.util.StringUtility;
 import org.eclipse.scout.rt.shared.TEXTS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,15 +46,25 @@ public class AbstractStartSimulationMenu extends AbstractMenu {
 
   @Override
   protected void execAction() {
-    HandDisinfectionEventSimulationForm form = new HandDisinfectionEventSimulationForm();
-    form.startNew();
-    form.waitFor();
-    if (form.isFormClosed()) {
-      HandDisinfectionEventSimulationFormData formData = new HandDisinfectionEventSimulationFormData();
-      form.exportFormData(formData);
+    HandDisinfectionEventSimulationFormData formData = null;
+    if (CONFIG.getPropertyValue(HandDisinfectionSimulationShowFormProperty.class)) {
+      HandDisinfectionEventSimulationForm form = new HandDisinfectionEventSimulationForm();
+      form.startNew();
+      form.waitFor();
+      if (form.isFormClosed() && form.isFormStored()) {
+        formData = new HandDisinfectionEventSimulationFormData();
+        form.exportFormData(formData);
+      }
+    }
+    else {
+      formData = new HandDisinfectionEventSimulationFormData();
+      formData = BEANS.get(IHandDisinfectionEventSimulationService.class).prepareSimulate(formData, false);
+    }
+
+    if (null != formData) {
       startSimulation(formData);
       showSimulationStartedNotification(formData.getDeviceDisplayText().getValue(), formData.getEmployeeDisplayText().getValue());
-      activateDeviceTableView();
+      activateDeviceTableView(formData.getDevice().getValue());
     }
   }
 
@@ -56,7 +73,7 @@ public class AbstractStartSimulationMenu extends AbstractMenu {
   }
 
   @SuppressWarnings("null")
-  private void activateDeviceTableView() {
+  private void activateDeviceTableView(String deviceId) {
     IDesktop desktop = ClientSession.get().getDesktop();
     try {
       IOutline standardOutline = null;
@@ -67,11 +84,26 @@ public class AbstractStartSimulationMenu extends AbstractMenu {
         }
       }
       IPage deviceTablePage = standardOutline.findPage(DeviceTablePage.class);
-      if (!standardOutline.isSelectedNode(deviceTablePage)) {
-        standardOutline.selectNode(deviceTablePage);
-        deviceTablePage.reloadPage();
-        desktop.activateOutline(standardOutline);
+      ITreeNode nodeToShow = deviceTablePage;
+      deviceTablePage.loadChildren();
+      List<?> pages = deviceTablePage.getChildPages();
+      for (Object page : pages) {
+        if (page instanceof DeviceNodePage) {
+          DeviceNodePage deviceNode = (DeviceNodePage) page;
+          if (StringUtility.equalsIgnoreCase(deviceNode.getDeviceId(), deviceId)) {
+            nodeToShow = deviceNode;
+            break;
+          }
+        }
       }
+
+      if (!standardOutline.isSelectedNode(nodeToShow)) {
+        standardOutline.selectNode(nodeToShow);
+        if (nodeToShow instanceof IPage) {
+          ((IPage) nodeToShow).reloadPage();
+        }
+      }
+      desktop.activateOutline(standardOutline);
     }
     catch (Exception e) {
       LOG.error("Could not activate device table page", e);

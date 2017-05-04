@@ -7,6 +7,14 @@ public interface DeviceSQLs {
       + "   THEN COALESCE(c.volume_current, 0) * 100 / c.volume_full "
       + "   ELSE NULL END ";
 
+  String DISPLAY_TEXT = ""
+      + " CASE "
+      + "   WHEN name IS NULL "
+      + "     THEN mac "
+      + "   ELSE "
+      + "     name || ' (' || mac || ')' "
+      + " END ";
+
   String CREATE_TABLE = ""
       + "CREATE   TABLE DEVICE "
       + "         (device_id VARCHAR(64) NOT NULL CONSTRAINT DEVICE_PK PRIMARY KEY, "
@@ -57,12 +65,7 @@ public interface DeviceSQLs {
 
   String LOOKUP = ""
       + "SELECT   device_id, "
-      + "         CASE "
-      + "           WHEN name IS NULL "
-      + "            THEN mac "
-      + "           ELSE "
-      + "             name || ' (' || mac || ')' "
-      + "         END "
+      + "         " + DISPLAY_TEXT + " "
       + "FROM     DEVICE "
       + "WHERE    1 = 1 "
       + "<key>    "
@@ -73,6 +76,8 @@ public interface DeviceSQLs {
       + "          OR UPPER(mac) LIKE UPPER('%'||:text||'%')) "
       + "</text>  "
       + "<all> </all> ";
+
+  String SIMULATION_DEVICE_ID = "e968c586d09244a4a23163edd1ca43b9";
 
   String INSERT_SAMPLE = ""
       + "INSERT   INTO DEVICE "
@@ -100,7 +105,7 @@ public interface DeviceSQLs {
       + "          'Level 3 / Wing C / Room 311', "
       + "          'AD-023-0156', "
       + "          'd2d72bfc13c0401d817ee942be643881', "
-      + "          'DEVICESTATUS.DESINFECTS', "
+      + "          'DEVICESTATUS.READY', "
       + "          '00:80:41:ae:fd:7f', "
       + "          'Koch') ";
 
@@ -216,6 +221,12 @@ public interface DeviceSQLs {
       + "         :bottelingDateData, "
       + "         :expirationDateData, "
       + "         :fillLevel ";
+
+  String SELECT_DISPLAY_NAME = ""
+      + "SELECT   " + DISPLAY_TEXT + " "
+      + "FROM     DEVICE "
+      + "WHERE    device_id = :device "
+      + "INTO     :deviceDisplayText ";
 
   String SELECT_RANDOM = ""
       + "SELECT device_id FROM DEVICE ORDER BY RANDOM() INTO :device";

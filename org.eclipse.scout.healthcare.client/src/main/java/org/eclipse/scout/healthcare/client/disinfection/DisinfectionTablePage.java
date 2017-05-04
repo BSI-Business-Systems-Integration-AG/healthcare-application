@@ -4,9 +4,11 @@ import org.eclipse.scout.healthcare.client.disinfection.DisinfectionTablePage.Ta
 import org.eclipse.scout.healthcare.client.ethereum.AbstractTrackOnlineMenu;
 import org.eclipse.scout.healthcare.shared.disinfection.DisinfectionTablePageData;
 import org.eclipse.scout.healthcare.shared.disinfection.IDisinfectionService;
+import org.eclipse.scout.healthcare.shared.ethereum.TransactionStatusLookupCall;
 import org.eclipse.scout.rt.client.dto.Data;
 import org.eclipse.scout.rt.client.ui.basic.table.AbstractTable;
 import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractDateTimeColumn;
+import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractLongColumn;
 import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractSmartColumn;
 import org.eclipse.scout.rt.client.ui.basic.table.columns.AbstractStringColumn;
 import org.eclipse.scout.rt.client.ui.desktop.outline.pages.AbstractPageWithTable;
@@ -14,6 +16,7 @@ import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.Order;
 import org.eclipse.scout.rt.shared.TEXTS;
 import org.eclipse.scout.rt.shared.services.common.jdbc.SearchFilter;
+import org.eclipse.scout.rt.shared.services.lookup.ILookupCall;
 
 @Data(DisinfectionTablePageData.class)
 public class DisinfectionTablePage extends AbstractPageWithTable<Table> {
@@ -43,7 +46,7 @@ public class DisinfectionTablePage extends AbstractPageWithTable<Table> {
 
   @Override
   protected void execLoadData(SearchFilter filter) {
-    importPageData(BEANS.get(IDisinfectionService.class).getDisinfectionTableData(filter));
+    importPageData(BEANS.get(IDisinfectionService.class).getDisinfectionTableData(filter, m_deviceId));
   }
 
   public class Table extends AbstractTable {
@@ -62,6 +65,14 @@ public class DisinfectionTablePage extends AbstractPageWithTable<Table> {
 
     public TrackingUrlColumn getTrackingUrlColumn() {
       return getColumnSet().getColumnByClass(TrackingUrlColumn.class);
+    }
+
+    public DurationColumn getDurationColumn() {
+      return getColumnSet().getColumnByClass(DurationColumn.class);
+    }
+
+    public EventIdColumn getEventIdColumn() {
+      return getColumnSet().getColumnByClass(EventIdColumn.class);
     }
 
     public StatusColumn getStatusColumn() {
@@ -124,11 +135,42 @@ public class DisinfectionTablePage extends AbstractPageWithTable<Table> {
       }
     }
 
+    @Order(4500)
+    public class DurationColumn extends AbstractLongColumn {
+      @Override
+      protected String getConfiguredHeaderText() {
+        return TEXTS.get("Duration") + TEXTS.get("inUnit", "ms");
+      }
+
+      @Override
+      protected int getConfiguredWidth() {
+        return 100;
+      }
+    }
+
     @Order(5000)
-    public class StatusColumn extends AbstractSmartColumn<String> {
+    public class StatusColumn extends AbstractSmartColumn<Integer> {
       @Override
       protected String getConfiguredHeaderText() {
         return TEXTS.get("Status");
+      }
+
+      @Override
+      protected int getConfiguredWidth() {
+        return 100;
+      }
+
+      @Override
+      protected Class<? extends ILookupCall<Integer>> getConfiguredLookupCall() {
+        return TransactionStatusLookupCall.class;
+      }
+    }
+
+    @Order(5500)
+    public class EventIdColumn extends AbstractStringColumn {
+      @Override
+      protected String getConfiguredHeaderText() {
+        return TEXTS.get("Uuid");
       }
 
       @Override
@@ -163,6 +205,11 @@ public class DisinfectionTablePage extends AbstractPageWithTable<Table> {
         return getTrackingUrlColumn();
       }
 
+      //TODO: [uko] remove. Only for demonstration
+      @Override
+      protected void execOwnerValueChanged(Object newOwnerValue) {
+        setEnabled(true);
+      }
     }
 
   }

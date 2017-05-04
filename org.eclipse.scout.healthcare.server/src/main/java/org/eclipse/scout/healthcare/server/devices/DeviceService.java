@@ -35,4 +35,10 @@ public class DeviceService implements IDeviceService {
     return formData;
   }
 
+  public void updateDeviceStatus(String deviceId, String statusId) {
+    SQL.update(DeviceSQLs.UPDATE_STATUS,
+        new NVPair("status", statusId),
+        new NVPair("deviceId", deviceId));
+  };
+
 }

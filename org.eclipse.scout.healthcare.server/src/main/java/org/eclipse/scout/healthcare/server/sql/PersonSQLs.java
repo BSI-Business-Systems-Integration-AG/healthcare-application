@@ -197,4 +197,10 @@ public interface PersonSQLs {
   String SELECT_RANDOM = ""
       + "SELECT person_id FROM PERSON ORDER BY RANDOM() INTO :employee";
 
+  String SELECT_DISPLAY_TEXT = ""
+      + "SELECT   first_name || ' ' || last_name "
+      + "FROM     PERSON "
+      + "WHERE    person_id = :employee "
+      + "INTO     :employeeDisplayText ";
+
 }

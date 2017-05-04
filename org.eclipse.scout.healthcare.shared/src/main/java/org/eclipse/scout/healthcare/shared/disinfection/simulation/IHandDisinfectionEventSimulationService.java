@@ -1,6 +1,5 @@
 package org.eclipse.scout.healthcare.shared.disinfection.simulation;
 
-import org.eclipse.scout.healthcare.shared.disinfection.simulation.HandDisinfectionEventSimulationFormData;
 import org.eclipse.scout.rt.platform.service.IService;
 import org.eclipse.scout.rt.shared.TunnelToServer;
 
@@ -16,7 +15,7 @@ public interface IHandDisinfectionEventSimulationService extends IService {
    * @param formData
    * @return
    */
-  HandDisinfectionEventSimulationFormData prepareSimulate(HandDisinfectionEventSimulationFormData formData);
+  HandDisinfectionEventSimulationFormData prepareSimulate(HandDisinfectionEventSimulationFormData formData, boolean random);
 
   /**
    * @param formData

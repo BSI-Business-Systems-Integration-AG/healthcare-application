@@ -12,4 +12,6 @@ public interface IDeviceService extends IService {
 
   DeviceOverviewFormData load(String deviceId);
 
+  void updateDeviceStatus(String deviceId, String statusId);
+
 }

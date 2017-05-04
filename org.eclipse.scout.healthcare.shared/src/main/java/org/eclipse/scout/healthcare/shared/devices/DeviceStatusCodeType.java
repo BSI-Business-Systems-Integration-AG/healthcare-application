@@ -95,9 +95,9 @@ public class DeviceStatusCodeType extends AbstractCodeType<String, String> {
   }
 
   @Order(5000)
-  public static class DesinfectsCode extends AbstractCode<String> {
+  public static class DisinfectsCode extends AbstractCode<String> {
     private static final long serialVersionUID = 1L;
-    public static final String ID = "DEVICESTATUS.DESINFECTS";
+    public static final String ID = "DEVICESTATUS.DISINFECTS";
 
     @Override
     protected String getConfiguredText() {

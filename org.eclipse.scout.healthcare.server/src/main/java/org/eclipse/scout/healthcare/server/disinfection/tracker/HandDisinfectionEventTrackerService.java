@@ -13,6 +13,7 @@ import org.eclipse.scout.healthcare.server.ethereum.EthereumProperties.EthereumD
 import org.eclipse.scout.healthcare.server.ethereum.EthereumService;
 import org.eclipse.scout.healthcare.server.ethereum.Web3jConvertUtility;
 import org.eclipse.scout.healthcare.server.ethereum.model.Account;
+import org.eclipse.scout.healthcare.server.ethereum.model.Transaction;
 import org.eclipse.scout.rt.platform.ApplicationScoped;
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.config.CONFIG;
@@ -66,9 +67,10 @@ public class HandDisinfectionEventTrackerService {
     try {
       TransactionReceipt receipt = getContract()
           .trackHandDisinfectionEvent(
-              event.getDeviceIdTyped(), event.getEmplyoeeIdTyped(), event.getCartridgeIdTyped(), event.getEventTimestampTyped(), event.getDurationTyped())
+              event.getDeviceIdTyped(), event.getEmplyoeeIdTyped(), event.getChemistryTyped(), event.getEventTimestampTyped(), event.getDurationTyped(), event.getEventIdTyped())
           .get();
       event.setTransactionHash(receipt.getTransactionHash());
+      event.setTransactionStatus(Transaction.PENDING);
     }
     catch (InterruptedException | ExecutionException e) {
       throw new ProcessingException("Could not track event in contract.", e);
@@ -99,7 +101,7 @@ public class HandDisinfectionEventTrackerService {
   private HandDisinfectionEvent getHandDisinfectionEventAtIndex(int index) {
     List<Type> list = null;
     try {
-      list = getContract().DisinfectionEvents(Web3jConvertUtility.convertType(index, Uint256.class)).get();
+      list = getContract().disinfectionEvents(Web3jConvertUtility.convertType(index, Uint256.class)).get();
     }
     catch (InterruptedException | ExecutionException e) {
       // nop. Reached last event.

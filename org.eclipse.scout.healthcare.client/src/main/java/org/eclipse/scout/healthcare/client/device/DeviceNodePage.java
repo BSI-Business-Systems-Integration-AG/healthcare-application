@@ -16,6 +16,10 @@ public class DeviceNodePage extends AbstractPageWithNodes {
     m_deviceId = deviceId;
   }
 
+  public String getDeviceId() {
+    return m_deviceId;
+  }
+
   @Override
   protected String getConfiguredTitle() {
     String title = TEXTS.get("DeviceOverview");
