@@ -1,10 +1,5 @@
 package org.eclipse.scout.healthcare.server.disinfection;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import org.eclipse.scout.healthcare.server.disinfection.model.HandDisinfectionEvent;
 import org.eclipse.scout.healthcare.server.disinfection.tracker.HandDisinfectionEventTrackerService;
 import org.eclipse.scout.healthcare.server.ethereum.EthereumService;
@@ -16,11 +11,7 @@ import org.eclipse.scout.healthcare.shared.disinfection.IDisinfectionService;
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.exception.ExceptionHandler;
 import org.eclipse.scout.rt.platform.exception.PlatformException;
-import org.eclipse.scout.rt.platform.holders.DateArrayHolder;
-import org.eclipse.scout.rt.platform.holders.IntegerArrayHolder;
-import org.eclipse.scout.rt.platform.holders.LongArrayHolder;
 import org.eclipse.scout.rt.platform.holders.NVPair;
-import org.eclipse.scout.rt.platform.holders.StringArrayHolder;
 import org.eclipse.scout.rt.platform.job.Jobs;
 import org.eclipse.scout.rt.platform.util.StringUtility;
 import org.eclipse.scout.rt.platform.util.concurrent.IRunnable;
@@ -43,7 +34,6 @@ public class DisinfectionService implements IDisinfectionService {
     DisinfectionTablePageData pageData = new DisinfectionTablePageData();
     HandDisinfectionEventTrackerService service = BEANS.get(HandDisinfectionEventTrackerService.class);
     HandDisinfectionEvent[] events = service.getAllHandDisinfectionEvents();
-    events = loadRemainingEventsFromDatabase(events);
     String contractAddress = service.getContractAddress();
     String trackingUrl = "";
     if (StringUtility.hasText(contractAddress)) {
@@ -101,69 +91,6 @@ public class DisinfectionService implements IDisinfectionService {
     if (StringUtility.isNullOrEmpty(event.getTransactionHash())) {
       LOG.error("Event could not be tracked. " + event.toString());
     }
-  }
-
-  private HandDisinfectionEvent[] loadRemainingEventsFromDatabase(HandDisinfectionEvent[] events) {
-    StringBuilder notIn = new StringBuilder();
-    for (HandDisinfectionEvent event : events) {
-      if (StringUtility.hasText(notIn.toString())) {
-        notIn.append(", ");
-      }
-      notIn.append(event.getEventId());
-    }
-    StringBuilder sql = new StringBuilder(DisinfectionSQLs.SELECT_ALL);
-    if (StringUtility.hasText(notIn.toString())) {
-      sql.append(DisinfectionSQLs.CONDITION_NOT_IN_EVENT_IDS);
-    }
-    sql.append(DisinfectionSQLs.INTO_ALL);
-
-    StringArrayHolder eventIdHolder = new StringArrayHolder();
-    StringArrayHolder deviceIdHolder = new StringArrayHolder();
-    StringArrayHolder employeeIdHolder = new StringArrayHolder();
-    StringArrayHolder chemistryHolder = new StringArrayHolder();
-    DateArrayHolder eventTimestampHolder = new DateArrayHolder();
-    LongArrayHolder durationHolder = new LongArrayHolder();
-    StringArrayHolder transactionHashHolder = new StringArrayHolder();
-    IntegerArrayHolder transactionStatusHolder = new IntegerArrayHolder();
-    LongArrayHolder eventNrHolder = new LongArrayHolder();
-
-    SQL.selectInto(sql.toString(),
-        new NVPair("eventIds", notIn.toString()),
-        new NVPair("eventId", eventIdHolder),
-        new NVPair("deviceId", deviceIdHolder),
-        new NVPair("employeeId", employeeIdHolder),
-        new NVPair("chemistry", chemistryHolder),
-        new NVPair("eventTimestamp", eventTimestampHolder),
-        new NVPair("duration", durationHolder),
-        new NVPair("transactionHash", transactionHashHolder),
-        new NVPair("transactionStatus", transactionStatusHolder),
-        new NVPair("eventNr", eventNrHolder));
-
-    int length = eventIdHolder.getValue().length;
-    if (length > 0) {
-      List<HandDisinfectionEvent> eventList = new ArrayList<HandDisinfectionEvent>(Arrays.asList(events));
-      for (int i = 0; i < length; i++) {
-        try {
-          String eventId = eventIdHolder.getValue()[i];
-          String deviceId = deviceIdHolder.getValue()[i];
-          String employeeId = employeeIdHolder.getValue()[i];
-          String chemistry = chemistryHolder.getValue()[i];
-          Date eventTimestamp = eventTimestampHolder.getValue()[i];
-          Long duration = durationHolder.getValue()[i];
-          String transactionHash = transactionHashHolder.getValue()[i];
-          Integer transactionStatus = transactionStatusHolder.getValue()[i];
-          Long eventNr = eventNrHolder.getValue()[i];
-
-          eventList.add(new HandDisinfectionEvent(eventId, deviceId, employeeId, chemistry, eventTimestamp,
-              duration, transactionHash, transactionStatus, eventNr));
-        }
-        catch (Exception e) {
-          LOG.error("Failed to convert database data to HandDisinfectionEvent", e);
-        }
-      }
-      events = eventList.toArray(new HandDisinfectionEvent[eventList.size()]);
-    }
-    return events;
   }
 
   private HandDisinfectionEvent loadRemainingInfoForEvent(HandDisinfectionEvent event) {
