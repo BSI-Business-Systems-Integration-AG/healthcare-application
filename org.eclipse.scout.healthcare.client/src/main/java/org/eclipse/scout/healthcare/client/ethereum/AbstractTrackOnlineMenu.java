@@ -15,7 +15,7 @@ import org.eclipse.scout.rt.shared.TEXTS;
 
 public abstract class AbstractTrackOnlineMenu<T extends AbstractStringColumn> extends AbstractMenu {
 
-  private T m_trackingUrlColumn;
+  protected T m_trackingUrlColumn;
 
   @Override
   protected String getConfiguredText() {

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
 import org.eclipse.scout.healthcare.server.disinfection.HandDisinfectionTracker;
 import org.eclipse.scout.healthcare.server.disinfection.model.HandDisinfectionEvent;
 import org.eclipse.scout.healthcare.server.disinfection.tracker.HandDisinfectionTrackerProperties.HandDisinfectionTrackerAddressProperty;
@@ -92,25 +93,7 @@ public class HandDisinfectionEventTrackerService {
     return event;
   }
 
-  public HandDisinfectionEvent[] getAllHandDisinfectionEvents() {
-    boolean reachedLastEvent = false;
-    int index = 0;
-    List<HandDisinfectionEvent> events = new ArrayList<HandDisinfectionEvent>();
-    while (!reachedLastEvent) {
-      HandDisinfectionEvent event = getHandDisinfectionEventAtIndex(index);
-      if (null != event) {
-        events.add(event);
-      }
-      else {
-        reachedLastEvent = true;
-      }
-
-      index = index + 1;
-    }
-
-    return events.toArray(new HandDisinfectionEvent[events.size()]);
-  }
-
+  @IgnoreJRERequirement
   public HandDisinfectionEvent reloadTransactionStatus(HandDisinfectionEvent event) {
     if (null != event) {
       EthGetTransactionReceipt txReceipt = null;
@@ -131,6 +114,25 @@ public class HandDisinfectionEventTrackerService {
     return event;
   }
 
+  public HandDisinfectionEvent[] getAllHandDisinfectionEvents() {
+    boolean reachedLastEvent = false;
+    int index = 0;
+    List<HandDisinfectionEvent> events = new ArrayList<HandDisinfectionEvent>();
+    while (!reachedLastEvent) {
+      HandDisinfectionEvent event = getHandDisinfectionEventAtIndex(index);
+      if (null != event) {
+        events.add(event);
+      }
+      else {
+        reachedLastEvent = true;
+      }
+
+      index = index + 1;
+    }
+
+    return events.toArray(new HandDisinfectionEvent[events.size()]);
+  }
+
   private HandDisinfectionEvent getHandDisinfectionEventAtIndex(int index) {
     List<Type> list = null;
     try {
@@ -141,7 +143,7 @@ public class HandDisinfectionEventTrackerService {
     }
 
     HandDisinfectionEvent event = null;
-    if (null != list) {
+    if (null != list && !list.isEmpty()) {
       try {
         event = HandDisinfectionEvent.parse(list);
       }

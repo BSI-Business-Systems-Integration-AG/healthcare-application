@@ -31,6 +31,19 @@ public class HandDisinfectionEvent {
   private HandDisinfectionEvent() {
   }
 
+  public HandDisinfectionEvent(String eventId, String deviceId, String employeeId, String chemistry, Date eventTimestamp,
+      Long duration, String transactionHash, int transactionStatus, Long eventNr) {
+    setEventId(eventId);
+    setDeviceId(deviceId);
+    setEmployeeId(employeeId);
+    setChemistry(chemistry);
+    setEventTimestamp(eventTimestamp);
+    setDuration(duration);
+    setTransactionHash(transactionHash);
+    setTransactionStatus(transactionStatus);
+    setEventNr(eventNr);
+  }
+
   public HandDisinfectionEvent(String deviceId, String employeeId, String chemistry, Date eventTimestamp, Long duration) {
     if (StringUtility.isNullOrEmpty(deviceId) || StringUtility.isNullOrEmpty(employeeId) || StringUtility.isNullOrEmpty(chemistry)
         || null == eventTimestamp || null == duration) {
@@ -150,7 +163,7 @@ public class HandDisinfectionEvent {
 
   private void parseInternal(List<Type> typeList) {
     if (null == typeList || typeList.size() != 7) {
-      throw new IllegalArgumentException("Type list has not the expected number of elements (6 elements expected).");
+      throw new IllegalArgumentException("Type list has not the expected number of elements (7 elements expected).");
     }
 
     if (!Uint256.class.isInstance(typeList.get(0))) {

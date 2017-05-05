@@ -8,7 +8,7 @@ public interface DisinfectionSQLs {
       + "          device_id VARCHAR(64), "
       + "          employee_id VARCHAR(64), "
       + "          chemistry VARCHAR(64), "
-      + "          evt_start DATE, "
+      + "          evt_start TIMESTAMP, "
       + "          duration NUMERIC(15), "
       + "          transaction_hash VARCHAR(255), "
       + "          transaction_status NUMERIC(2), "
@@ -66,5 +66,32 @@ public interface DisinfectionSQLs {
       + "WHERE  disinfection_event_id = :eventId "
       + "INTO   :transactionHash, "
       + "       :transactionStatus ";
+
+  String SELECT_ALL = ""
+      + "SELECT disinfection_event_id, "
+      + "       device_id, "
+      + "       employee_id, "
+      + "       chemistry, "
+      + "       evt_start, "
+      + "       duration, "
+      + "       transaction_hash, "
+      + "       transaction_status, "
+      + "       disinfection_event_nr "
+      + "FROM   DISINFECTION_EVENT "
+      + "WHERE  1 = 1 ";
+
+  String INTO_ALL = " "
+      + "INTO   :eventId,"
+      + "       :deviceId, "
+      + "       :employeeId, "
+      + "       :chemistry, "
+      + "       :eventTimestamp, "
+      + "       :duration, "
+      + "       :transactionHash, "
+      + "       :transactionStatus, "
+      + "       :eventNr ";
+
+  String CONDITION_NOT_IN_EVENT_IDS = " "
+      + "AND disinfection_event_id NOT IN (:eventIds)";
 
 }
