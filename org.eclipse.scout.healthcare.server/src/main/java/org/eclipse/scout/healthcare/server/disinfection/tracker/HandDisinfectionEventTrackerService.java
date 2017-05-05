@@ -25,6 +25,7 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 @ApplicationScoped
@@ -108,6 +109,26 @@ public class HandDisinfectionEventTrackerService {
     }
 
     return events.toArray(new HandDisinfectionEvent[events.size()]);
+  }
+
+  public HandDisinfectionEvent reloadTransactionStatus(HandDisinfectionEvent event) {
+    if (null != event) {
+      EthGetTransactionReceipt txReceipt = null;
+
+      try {
+        txReceipt = getWeb3j().ethGetTransactionReceipt(event.getTransactionHash()).sendAsync().get();
+      }
+      catch (Exception e) {
+        throw new ProcessingException("failed to poll status for event " + event.toString(), e);
+      }
+
+      TransactionReceipt receipt = txReceipt.getResult();
+
+      if (receipt != null && receipt.getBlockHash().length() > 0) {
+        event.setTransactionStatus(Transaction.CONFIRMED);
+      }
+    }
+    return event;
   }
 
   private HandDisinfectionEvent getHandDisinfectionEventAtIndex(int index) {

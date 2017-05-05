@@ -54,6 +54,11 @@ public interface DisinfectionSQLs {
       + "       disinfection_event_nr = :eventNr "
       + "WHERE  disinfection_event_id = :eventId ";
 
+  String UPDATE_STATUS = ""
+      + "UPDATE DISINFECTION_EVENT SET "
+      + "       transaction_status = :transactionStatus "
+      + "WHERE  disinfection_event_id = :eventId ";
+
   String SELECT_REMAINING = ""
       + "SELECT transaction_hash, "
       + "       transaction_status "

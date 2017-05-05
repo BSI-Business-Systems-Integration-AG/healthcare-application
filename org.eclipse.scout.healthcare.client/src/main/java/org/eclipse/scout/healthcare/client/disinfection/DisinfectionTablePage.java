@@ -92,7 +92,7 @@ public class DisinfectionTablePage extends AbstractPageWithTable<Table> {
 
       @Override
       protected int getConfiguredWidth() {
-        return 140;
+        return 480;
       }
     }
 
@@ -101,6 +101,11 @@ public class DisinfectionTablePage extends AbstractPageWithTable<Table> {
       @Override
       protected String getConfiguredHeaderText() {
         return TEXTS.get("Device");
+      }
+
+      @Override
+      protected boolean getConfiguredVisible() {
+        return false;
       }
 
       @Override
@@ -118,7 +123,7 @@ public class DisinfectionTablePage extends AbstractPageWithTable<Table> {
 
       @Override
       protected int getConfiguredWidth() {
-        return 120;
+        return 85;
       }
     }
 
@@ -130,8 +135,23 @@ public class DisinfectionTablePage extends AbstractPageWithTable<Table> {
       }
 
       @Override
+      protected boolean getConfiguredSortAscending() {
+        return false;
+      }
+
+      @Override
+      protected int getConfiguredSortIndex() {
+        return 1;
+      }
+
+      @Override
+      protected String getConfiguredFormat() {
+        return "dd.MM.yyyy HH:mm:ss";
+      }
+
+      @Override
       protected int getConfiguredWidth() {
-        return 160;
+        return 130;
       }
     }
 
@@ -139,12 +159,12 @@ public class DisinfectionTablePage extends AbstractPageWithTable<Table> {
     public class DurationColumn extends AbstractLongColumn {
       @Override
       protected String getConfiguredHeaderText() {
-        return TEXTS.get("Duration") + TEXTS.get("inUnit", "ms");
+        return TEXTS.get("Duration") + " " + TEXTS.get("inUnit", "ms");
       }
 
       @Override
       protected int getConfiguredWidth() {
-        return 100;
+        return 105;
       }
     }
 
@@ -157,7 +177,7 @@ public class DisinfectionTablePage extends AbstractPageWithTable<Table> {
 
       @Override
       protected int getConfiguredWidth() {
-        return 100;
+        return 85;
       }
 
       @Override
@@ -175,7 +195,7 @@ public class DisinfectionTablePage extends AbstractPageWithTable<Table> {
 
       @Override
       protected int getConfiguredWidth() {
-        return 100;
+        return 260;
       }
     }
 

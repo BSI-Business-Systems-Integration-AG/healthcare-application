@@ -51,6 +51,10 @@ public class Transaction {
     status = UNDEFINED;
   }
 
+  public static boolean isValidStatus(int status) {
+    return (ERROR <= status && status <= CONFIRMED);
+  }
+
   public UUID getId() {
     return id;
   }

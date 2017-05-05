@@ -3,6 +3,7 @@ package org.eclipse.scout.healthcare.server.disinfection;
 import org.eclipse.scout.healthcare.server.disinfection.model.HandDisinfectionEvent;
 import org.eclipse.scout.healthcare.server.disinfection.tracker.HandDisinfectionEventTrackerService;
 import org.eclipse.scout.healthcare.server.ethereum.EthereumService;
+import org.eclipse.scout.healthcare.server.ethereum.model.Transaction;
 import org.eclipse.scout.healthcare.server.sql.SuperUserRunContextProducer;
 import org.eclipse.scout.healthcare.shared.disinfection.DisinfectionTablePageData;
 import org.eclipse.scout.healthcare.shared.disinfection.DisinfectionTablePageData.DisinfectionTableRowData;
@@ -10,6 +11,7 @@ import org.eclipse.scout.healthcare.shared.disinfection.IDisinfectionService;
 import org.eclipse.scout.rt.platform.BEANS;
 import org.eclipse.scout.rt.platform.exception.ExceptionHandler;
 import org.eclipse.scout.rt.platform.exception.PlatformException;
+import org.eclipse.scout.rt.platform.holders.NVPair;
 import org.eclipse.scout.rt.platform.job.Jobs;
 import org.eclipse.scout.rt.platform.util.StringUtility;
 import org.eclipse.scout.rt.platform.util.concurrent.IRunnable;
@@ -93,7 +95,21 @@ public class DisinfectionService implements IDisinfectionService {
 
   private HandDisinfectionEvent loadRemainingInfoForEvent(HandDisinfectionEvent event) {
     SQL.selectInto(DisinfectionSQLs.SELECT_REMAINING, event);
+    if (event.getTransactionStatus() == Transaction.PENDING) {
+      event = BEANS.get(HandDisinfectionEventTrackerService.class).reloadTransactionStatus(event);
+      if (event.getTransactionStatus() != Transaction.PENDING) {
+        updateTransactionStatus(event.getEventId(), event.getTransactionStatus());
+      }
+    }
     return event;
+  }
+
+  private void updateTransactionStatus(String eventId, int status) {
+    if (Transaction.isValidStatus(status)) {
+      SQL.update(DisinfectionSQLs.UPDATE_STATUS,
+          new NVPair("transactionStatus", status),
+          new NVPair("eventId", eventId));
+    }
   }
 
   private class TrackDisinfectionEventJob implements IRunnable {
